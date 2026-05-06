@@ -23,8 +23,9 @@ int:Signed32 appId = 5712614;
 
 // API Key Config
 ConnectionConfig apikeyConfig = {
-    auth: {
+    auth: <ApiKeysConfig>{
         hapikey: apiKey,
+        privateApp: "",
         privateAppLegacy: ""
     }
 };
@@ -43,13 +44,23 @@ FieldTypeDefinition typeDefinition = {
     'type: "enumeration",
     fieldType: "select",
     optionsUrl: "https://webhook.site/94d09471-6f4c-4a7f-bae2-c9a585dd41e0",
-    options: []
+    options: [],
+    schema: {
+        'type: "STRING"
+    },
+    useChirp: false
 };
 
-InputFieldDefinition inputFieldDefinition = {
+PublicInputFieldDefinition inputFieldDefinition = {
     isRequired: true,
-    automationFieldType: "",
-    typeDefinition: typeDefinition,
+    typeDefinition: {
+        referencedObjectType: "OWNER",
+        name: "optionsInput",
+        'type: "enumeration",
+        fieldType: "select",
+        optionsUrl: "https://webhook.site/94d09471-6f4c-4a7f-bae2-c9a585dd41e0",
+        options: []
+    },
     supportedValueTypes: ["STATIC_VALUE"]
 };
 
