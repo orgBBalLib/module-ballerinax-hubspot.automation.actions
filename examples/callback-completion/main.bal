@@ -15,21 +15,27 @@
 // under the License.
 
 import ballerina/io;
-import ballerinax/hubspot.automation.actions;
+import ballerina/http;
 
 configurable string oauthKey = ?;
 
+type CallbackCompletionRequest record {
+    string callbackId;
+    map<string> outputFields;
+};
+
+type BatchInputCallbackCompletionBatchRequest record {
+    CallbackCompletionRequest[] inputs;
+};
+
 public function main() returns error? {
-    // BearerTokenConfig
-    actions:ConnectionConfig oauthConfig = {
+    http:Client automationClient = check new ("https://api.hubapi.com/automation/v4/actions", {
         auth: {
             token: oauthKey
         }
-    };
+    });
 
-    final actions:Client automationClient = check new actions:Client(oauthConfig);
-
-    actions:BatchInputCallbackCompletionBatchRequest batchCallbackCompletionRequest = {
+    BatchInputCallbackCompletionBatchRequest batchCallbackCompletionRequest = {
         inputs: [
             {
                 callbackId: "1",
@@ -39,6 +45,6 @@ public function main() returns error? {
             }
         ]
     };
-    _ = check automationClient->/callbacks/complete.post(batchCallbackCompletionRequest);
+    http:Response _ = check automationClient->/callbacks/complete.post(batchCallbackCompletionRequest);
     io:println("Batch completion request sent successfully");
 }

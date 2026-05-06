@@ -26,7 +26,8 @@ function testRespondBatch() returns error? {
                 callbackId: "1",
                 outputFields: {
                     "exampleField": "exampleValue"
-                }
+                },
+                typedOutputs: {}
             }
         ]
     };
