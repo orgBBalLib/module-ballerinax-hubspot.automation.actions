@@ -1,184 +1,120 @@
 ## Overview
 
-[HubSpot](https://www.hubspot.com/) is an AI-powered customer relationship management (CRM) platform.
+[HubSpot](https://www.hubspot.com/) is a cloud-based customer relationship management (CRM) platform that provides marketing, sales, customer service, and content management tools to help businesses grow and manage customer relationships effectively.
 
-The HubSpot Automation Actions connector offers APIs to connect and interact with the [Automation Actions](https://developers.hubspot.com/docs/reference/api/automation/custom-workflow-actions) endpoints.
-
-### Key Features
-
-- Connect and interact with HubSpot Automation Actions endpoints
-- Support for HubSpot REST API
-- Manage extensions and functions efficiently
-- Seamless integration with HubSpot workflows
-
+The `ballerinax/hubspot.automation.actions` package offers APIs to connect and interact with [HubSpot Automation Actions API](https://developers.hubspot.com/docs/api/automation/custom-workflow-actions) endpoints, specifically based on [HubSpot Automation Actions API v4](https://developers.hubspot.com/docs/api/automation/custom-workflow-actions).
 ## Setup guide
 
-To use the HubSpot Automation action API connector in Ballerina, you must have a HubSpot developer account. If you don't have an account, create one using the following steps.
+To use the HubSpot Automation Actions connector, you must have access to the HubSpot API through a [HubSpot developer account](https://developers.hubspot.com/) and obtain an API access token. If you do not have a HubSpot account, you can sign up for one [here](https://app.hubspot.com/signup-hubspot/crm).
 
-### Step 1: Create a HubSpot Developer Account
+### Step 1: Create a HubSpot Account
 
-Visit the [HubSpot portal](https://developers.hubspot.com/get-started) and create a Developer Account.
+1. Navigate to the [HubSpot website](https://www.hubspot.com/) and sign up for an account or log in if you already have one.
 
-### Step 2: Create a HubSpot Developer Test Account
+2. Ensure you have a Professional or Enterprise plan subscription, as the Automation Actions API requires access to workflows which are only available on these higher-tier plans.
 
-Visit [developer test account page](https://developers.hubspot.com/beta-docs/getting-started/account-types#developer-test-accounts) and create a HubSpot developer test account.
+### Step 2: Generate an API Access Token
 
-### Step 3: Create a HubSpot Public App
+1. Log in to your HubSpot account.
 
-In your developer account, navigate to the "Apps" section.
+2. In the main navigation bar, click the settings icon (gear icon) to access your account settings.
 
-Click on "Create App" and provide the necessary details, including the app name and description.
+3. In the left sidebar menu, navigate to Integrations > Private Apps.
 
-### Step 4: Initiate the OAuth Flow
+4. Click Create a private app.
 
-Move to the Auth tab in the created app and set the permissions there.
+5. On the Basic Info tab, enter a name and description for your app.
 
-Under the OAuth tab you can find the following details,
+6. Navigate to the Scopes tab and select the required scopes for automation actions (such as `automation` under the CRM section).
 
-* `client_id`: Your app's Client ID.
-* `redirect_uri`: The URL users will be redirected to after granting access.
-* `scope`: A space-separated list of scopes your app is requesting.
+7. Click Create app in the top right corner, then click Continue creating to confirm.
 
-![Auth Tab example](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/refs/heads/main/docs/setup/resources/auth.png)
+8. In the dialog box, copy the access token that is displayed.
 
-### Step   5: Add the redirect URL
-
-Add your redirect url under the redirect urls.
-
-![add the redirect url](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/refs/heads/main/docs/setup/resources/redirect_url.png)
-
-### Step   6: Add the Required Scopes
-
-For Automation Actions, the required scopes are;
-
-* 'automation'
-
-![Required Scopes](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/refs/heads/main/docs/setup/resources/scopes.png)
-
-Save the app
-
-![Save the app](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/refs/heads/main/docs/setup/resources/save.png)
-
-### Step   7: Obtain the authorization code
-
-Copy the App installation url and paste it in the web browser.
-
-![Redirect URL ](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/refs/heads/main/docs/setup/resources/redirect.png)
-
- It wll prompt you to install  the App and then select your developer test account.
-
-After selecting the developer test account, you will receive a authorization code displayed in the browser.
-
-![Obtain the authorization code](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/refs/heads/main/docs/setup/resources/authorization_code.png)
-
-### Step   8: Obtain the access token
-
-Place your `<authorization_code>`, `<client_id>` and `<client_secret>` in the following command and execute it in the terminal
-
-'curl --request POST \
-  --url https://api.hubapi.com/oauth/v1/token \
-  --header 'content-type: application/x-www-form-urlencoded' \
-  --data 'grant_type=authorization_code&code=<authorization_code>&redirect_uri=http://localhost:9090&client_id=<client_id>&client_secret=<client_secret>'
-
-In order to receive a token we need to run a listener at the provided redirect uri.
-
-If the command executes successfully , you will receive the access token from the response.
-
-### Step   9: Obtaining the developer API key
-
-Follow the instructions at (https://developers.hubspot.com/docs/api/developer-tools-overview#developer-api-keys) to obtain the developer API key.
-
+> **Tip:** You must copy and store this key somewhere safe. It won't be visible again after you close the dialog for security reasons. If you lose it, you will need to rotate the token to generate a new one.
 ## Quickstart
 
-To begin using the `HubSpot Automation API` connector in your Ballerina application, you'll need to follow these steps:
+To use the `HubSpot Automation Actions` connector in your Ballerina application, update the `.bal` file as follows:
 
-### Step 1: Import the connector
-
-First, import the `ballerinax/hubspot.automation.actions` package into your Ballerina project.
+### Step 1: Import the module
 
 ```ballerina
-import ballerinax/hubspot.automation.actions;
+import ballerinax/hubspot.automation.actions as hsactions;
 ```
 
 ### Step 2: Instantiate a new connector
 
-Create a `actions:ConnectionConfig` object with your domain and developer API token, and initialize the connector.
+1. Create a `Config.toml` file and configure the obtained credentials:
+
+```toml
+clientId = "<Your_Client_Id>"
+clientSecret = "<Your_Client_Secret>"
+refreshToken = "<Your_Refresh_Token>"
+```
+
+2. Create a `hsactions:ConnectionConfig` and initialize the client:
 
 ```ballerina
-actions:ConnectionConfig config = {
-   auth: {
-    hapikey: "<developer-api-key>" ,
-    private\-app\-legacy: ""
-   }
-};
-final actions:Client hubspotAutomation = check new (config);
+configurable string clientId = ?;
+configurable string clientSecret = ?;
+configurable string refreshToken = ?;
+
+final hsactions:Client hsactionsClient = check new ({
+    auth: {
+        clientId,
+        clientSecret,
+        refreshToken
+    }
+});
 ```
 
 ### Step 3: Invoke the connector operation
 
-Utilize the connector's operations to manage extensions and functions.
+Now, utilize the available connector operations.
 
-#### Create an extension
-
-```ballerina
-
-actions:FieldTypeDefinition typeDefinition = {
-    referencedObjectType: "OWNER",
-    externalOptions: false,
-    externalOptionsReferenceType: "",
-    name: "optionsInput",
-    'type: "enumeration",
-    fieldType: "select",
-    optionsUrl: "https://webhook.site/94d09471-6f4c-4a7f-bae2-c9a585dd41e0",
-    options: []
-};
-
-actions:InputFieldDefinition inputFieldDefinition = {
-    isRequired: true,
-    automationFieldType: "",
-    typeDefinition: typeDefinition,
-    supportedValueTypes: ["STATIC_VALUE"]
-};
-
-actions:PublicActionFunction publicActionFunction = {
-    functionSource: "exports.main = (event, callback) => {\r\n  callback({\r\n    outputFields: {\r\n      myOutput: \"example output value\"\r\n    }\r\n  });\r\n}",
-    functionType: "POST_ACTION_EXECUTION"
-};
-
-actions:PublicActionDefinitionEgg testingPublicActionDefinitionEgg = {
-    inputFields: [inputFieldDefinition],
-    actionUrl: "https://webhook.site/94d09471-6f4c-4a7f-bae2-c9a585dd41e0",
-    published: false,
-    objectTypes: ["CONTACT"],
-    objectRequestOptions: { properties: ["email"] },
-    functions: [publicActionFunction],
-    labels: {
-        "en": {
-            "inputFieldLabels": {
-                "staticInput": "Static Input",
-                "objectInput": "Object Property Input",
-                "optionsInput": "External Options Input"
-            },
-            "actionName": "My Extension",
-            "actionDescription": "My Extension Description",
-            "appDisplayName": "My App Display Name",
-            "actionCardContent": "My Action Card Content"
-        }
-    }
-};
-
-actions: PublicActionDefinition response = check hubspotAutomation->/[appId].post(testingPublicActionDefinitionEgg);
-```
-
-#### List definitions
+#### Create a new custom action definition
 
 ```ballerina
-actions : CollectionResponsePublicActionDefinitionForwardPaging response = check hubspotAutomation->/automation/v4/actions/[appId];
+public function main() returns error? {
+    hsactions:PublicActionDefinitionEgg newAction = {
+        actionUrl: "https://example.com/webhook",
+        published: false,
+        objectTypes: ["CONTACT"],
+        labels: {
+            "en": {
+                actionName: "Send Welcome Email",
+                actionDescription: "Sends a welcome email to new contacts"
+            }
+        },
+        inputFields: [
+            {
+                isRequired: true,
+                typeDefinition: {
+                    name: "email",
+                    label: "Email Address",
+                    'type: "string",
+                    fieldType: "text",
+                    options: [],
+                    useChirp: false,
+                    externalOptions: false
+                }
+            }
+        ],
+        functions: []
+    };
+
+    hsactions:PublicActionDefinition response = check hsactionsClient->/[123456].post(newAction);
+}
 ```
 
+### Step 4: Run the Ballerina application
+
+```bash
+bal run
+```
 ## Examples
 
-The `HubSpot Automation API` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/tree/main/examples/), covering the following use cases:
+The `hubspot.automation.actions` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/tree/main/examples), covering the following use cases:
 
-1. [Extension CRUD](https://github.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/tree/main/examples/extension-crud)- Perform CRUD operations on Extensions
-2. [Call complete callback APIs](https://github.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/tree/main/examples/callback-completion) - Complete callbacks using the  HubSpot API
+1. [Action version rollback](https://github.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/tree/main/examples/action-version-rollback) - Demonstrates how to roll back an automation action to a previous version.
+2. [Workflow action lifecycle management](https://github.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/tree/main/examples/workflow-action-lifecycle-management) - Illustrates managing the complete lifecycle of workflow actions including creation, updates, and deletion.
