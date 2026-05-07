@@ -1,23 +1,22 @@
 # Examples
 
-The `ballerinax/hubspot.automation.actions` connector provides practical examples illustrating usage in various scenarios.
+The `hubspot.automation.actions` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/tree/main/examples), covering use cases like automation action version rollback, and custom action lifecycle management.
 
-1.[Extension Defintion CRUD](examples/extension-crud/main.bal)
+1. [Automation action version rollback](https://github.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/tree/main/examples/automation-action-version-rollback) - Rollback an automation action to a previous version when issues are detected.
 
-2.[Callback Completion](examples/callback-completion/main.bal)
+2. [Custom action lifecycle management](https://github.com/ballerina-platform/module-ballerinax-hubspot.automation.actions/tree/main/examples/custom-action-lifecycle-management) - Manage the complete lifecycle of custom automation actions including creation, updates, and deletion.
 
 ## Prerequisites
 
-1. Generate Credentials to authenticate the connector as described in the [Setup Guide](README.md)
+1. Generate HubSpot credentials to authenticate the connector as described in the [Setup guide](https://central.ballerina.io/ballerinax/hubspot.automation.actions/latest#setup-guide).
 
-2. For each example create a Config.toml following the [Config.toml.template] 
+2. For each example, create a `Config.toml` file the related configuration. Here's an example of how your `Config.toml` file should look:
 
-```
-apiKey="<developer api key>"
-oauthKey="<oauth-key>"
-```
+    ```toml
+    token = "<Access Token>"
+    ```
 
-## Running an example
+## Running an Example
 
 Execute the following commands to build an example from the source:
 
@@ -31,22 +30,4 @@ Execute the following commands to build an example from the source:
 
     ```bash
     bal run
-    ```
-
-## Building the examples with the local module
-
-**Warning**: Due to the absence of support for reading local repositories for single Ballerina files, the Bala of the module is manually written to the central repository as a workaround. Consequently, the bash script may modify your local Ballerina repositories.
-
-Execute the following commands to build all the examples against the changes you have made to the module locally:
-
-* To build all the examples:
-
-    ```bash
-    ./build.sh build
-    ```
-
-* To run all the examples:
-
-    ```bash
-    ./build.sh run
     ```
