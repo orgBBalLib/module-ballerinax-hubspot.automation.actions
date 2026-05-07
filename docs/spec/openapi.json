@@ -1,1610 +1,3392 @@
 {
-  "openapi" : "3.0.1",
-  "info" : {
-    "title" : "Automation Actions V4",
-    "version" : "v4",
-    "x-hubspot-product-tier-requirements" : {
-      "marketing" : "PROFESSIONAL",
-      "sales" : "PROFESSIONAL",
-      "service" : "PROFESSIONAL"
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Automation Actions V4",
+        "description": "Basepom for all HubSpot Projects",
+        "version": "v4",
+        "x-hubspot-product-tier-requirements": {
+            "marketing": "PROFESSIONAL",
+            "sales": "PROFESSIONAL",
+            "service": "PROFESSIONAL",
+            "cms": "PROFESSIONAL",
+            "commerce": "PROFESSIONAL",
+            "crmHub": "PROFESSIONAL",
+            "dataHub": "PROFESSIONAL"
+        },
+        "x-hubspot-related-documentation": [
+            {
+                "name": "Custom Workflow Actions Guide",
+                "url": "https://developers.hubspot.com/docs/guides/api/automation/custom-workflow-actions"
+            }
+        ]
     },
-    "x-hubspot-documentation-banner" : "NONE",
-    "x-hubspot-api-use-case" : "You want to empower other users in your account to automate specialized parts of their day-to-day processes (e.g., creating highly customized quotes based on the data from an enrolled contact and their associations).",
-    "x-hubspot-related-documentation" : [ {
-      "name" : "Custom Workflow Actions Guide",
-      "url" : "https://developers.hubspot.com/beta-docs/guides/api/automation/custom-workflow-actions"
-    } ],
-    "x-hubspot-introduction" : "Use the automation API to define custom actions in the HubSpot workflows tool, which allows users in your account to integrate with external services as they build out a HubSpot workflow."
-  },
-  "servers" : [ {
-    "url" : "https://api.hubapi.com/automation/v4/actions"
-  } ],
-  "tags" : [ {
-    "name" : "Callbacks"
-  }, {
-    "name" : "Definitions"
-  }, {
-    "name" : "Functions"
-  }, {
-    "name" : "Revisions"
-  } ],
-  "paths" : {
-    "/callbacks/{callbackId}/complete" : {
-      "post" : {
-        "tags" : [ "Callbacks" ],
-        "summary" : "Completes a single callback",
-        "operationId" : "post-/callbacks/{callbackId}/complete_complete",
-        "parameters" : [ {
-          "name" : "callbackId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CallbackCompletionRequest"
-              }
+    "servers": [
+        {
+            "url": "https://api.hubapi.com/automation/v4/actions"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Callbacks"
+        },
+        {
+            "name": "Definitions"
+        },
+        {
+            "name": "Functions"
+        },
+        {
+            "name": "Revisions"
+        }
+    ],
+    "paths": {
+        "/callbacks/complete": {
+            "post": {
+                "tags": [
+                    "Callbacks"
+                ],
+                "summary": "Complete a batch of callbacks",
+                "description": "Complete a batch of blocked action executions.",
+                "operationId": "post-/automation/v4/actions/callbacks/complete_completeBatch",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BatchInputCallbackCompletionBatchRequest"
+                            },
+                            "example": null
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content",
+                        "content": {}
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "workflows-access"
+                        ]
+                    }
+                ]
             }
-          },
-          "required" : true
         },
-        "responses" : {
-          "204" : {
-            "description" : "No content",
-            "content" : { }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
+        "/callbacks/{callbackId}/complete": {
+            "post": {
+                "tags": [
+                    "Callbacks"
+                ],
+                "summary": "Completes a callback",
+                "description": "Complete a specific blocked action execution by ID.",
+                "operationId": "post-/automation/v4/actions/callbacks/{callbackId}/complete_complete",
+                "parameters": [
+                    {
+                        "name": "callbackId",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CallbackCompletionRequest"
+                            },
+                            "example": null
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content",
+                        "content": {}
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "workflows-access"
+                        ]
+                    }
+                ]
+            }
         },
-        "security" : [ {
-          "oauth2_legacy" : [ "automation" ]
-        }, {
-          "private_apps_legacy" : [ "automation" ]
-        } ]
-      }
+        "/{appId}": {
+            "get": {
+                "tags": [
+                    "Definitions"
+                ],
+                "summary": "Retrieve custom action definitions",
+                "description": "Retrieve custom workflow action definitions by app ID.",
+                "operationId": "get-/automation/v4/actions/{appId}_getPage",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "after",
+                        "in": "query",
+                        "description": "The paging cursor token of the last successfully read resource will be returned as the `paging.next.after` JSON property of a paged response containing more results",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "archived",
+                        "in": "query",
+                        "description": "Whether to return only results that have been archived",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false,
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "The maximum number of results to display per page",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CollectionResponsePublicActionDefinitionForwardPaging"
+                                },
+                                "example": null
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-read"
+                        ]
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Definitions"
+                ],
+                "summary": "Create a new custom action definition",
+                "description": "Create a new custom workflow action.",
+                "operationId": "post-/automation/v4/actions/{appId}_create",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PublicActionDefinitionEgg"
+                            },
+                            "example": null
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicActionDefinition"
+                                },
+                                "example": null
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-write"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/{appId}/{definitionId}": {
+            "get": {
+                "tags": [
+                    "Definitions"
+                ],
+                "summary": "Retrieve a custom action definition",
+                "description": "Retrieve a custom workflow action definition by ID.",
+                "operationId": "get-/automation/v4/actions/{appId}/{definitionId}_getById",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "definitionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "archived",
+                        "in": "query",
+                        "description": "Whether to return only results that have been archived",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false,
+                            "example": null
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicActionDefinition"
+                                },
+                                "example": null
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-read"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Definitions"
+                ],
+                "summary": "Delete an action definition",
+                "description": "Delete an action definition by ID.",
+                "operationId": "delete-/automation/v4/actions/{appId}/{definitionId}_archive",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "definitionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content",
+                        "content": {}
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-write"
+                        ]
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Definitions"
+                ],
+                "summary": "Update an existing action definition",
+                "description": "Update an existing action definition by ID.",
+                "operationId": "patch-/automation/v4/actions/{appId}/{definitionId}_update",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "definitionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PublicActionDefinitionPatch"
+                            },
+                            "example": null
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicActionDefinition"
+                                },
+                                "example": null
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-write"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/{appId}/{definitionId}/functions": {
+            "get": {
+                "tags": [
+                    "Functions"
+                ],
+                "summary": "Retrieve functions for a given definition",
+                "description": "Retrieve all functions included in a definition.",
+                "operationId": "get-/automation/v4/actions/{appId}/{definitionId}/functions_getPage",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "definitionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CollectionResponsePublicActionFunctionIdentifierNoPaging"
+                                },
+                                "example": null
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-read"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/{appId}/{definitionId}/functions/{functionType}": {
+            "get": {
+                "tags": [
+                    "Functions"
+                ],
+                "summary": "Retrieve functions by a type for a given definition",
+                "description": "Retrieve functions of a specific type for a given definition.",
+                "operationId": "get-/automation/v4/actions/{appId}/{definitionId}/functions/{functionType}_getByFunctionType",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "definitionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "functionType",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "POST_ACTION_EXECUTION",
+                                "POST_FETCH_OPTIONS",
+                                "PRE_ACTION_EXECUTION",
+                                "PRE_FETCH_OPTIONS"
+                            ],
+                            "example": null
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicActionFunction"
+                                },
+                                "example": null
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-read"
+                        ]
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Functions"
+                ],
+                "summary": "Insert a function for a definition",
+                "description": "Add a function for a given definition.",
+                "operationId": "put-/automation/v4/actions/{appId}/{definitionId}/functions/{functionType}_createOrReplaceByFunctionType",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "definitionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "functionType",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "POST_ACTION_EXECUTION",
+                                "POST_FETCH_OPTIONS",
+                                "PRE_ACTION_EXECUTION",
+                                "PRE_FETCH_OPTIONS"
+                            ],
+                            "example": null
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "text/plain": {
+                            "schema": {
+                                "type": "string",
+                                "example": null
+                            },
+                            "example": null
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicActionFunctionIdentifier"
+                                },
+                                "example": null
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-write"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Functions"
+                ],
+                "summary": "Delete a function for a definition",
+                "description": "Delete a function within a given definition.",
+                "operationId": "delete-/automation/v4/actions/{appId}/{definitionId}/functions/{functionType}_archiveByFunctionType",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "definitionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "functionType",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "POST_ACTION_EXECUTION",
+                                "POST_FETCH_OPTIONS",
+                                "PRE_ACTION_EXECUTION",
+                                "PRE_FETCH_OPTIONS"
+                            ],
+                            "example": null
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content",
+                        "content": {}
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-write"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/{appId}/{definitionId}/functions/{functionType}/{functionId}": {
+            "get": {
+                "tags": [
+                    "Functions"
+                ],
+                "summary": "Retrieve a function from a given definition",
+                "description": "Retrieve a specific function from a given definition.",
+                "operationId": "get-/automation/v4/actions/{appId}/{definitionId}/functions/{functionType}/{functionId}_getById",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "definitionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "functionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "functionType",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "POST_ACTION_EXECUTION",
+                                "POST_FETCH_OPTIONS",
+                                "PRE_ACTION_EXECUTION",
+                                "PRE_FETCH_OPTIONS"
+                            ],
+                            "example": null
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicActionFunction"
+                                },
+                                "example": null
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-read"
+                        ]
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Functions"
+                ],
+                "summary": "Update a function for a definition",
+                "description": "Update a function for a given definition by ID.",
+                "operationId": "put-/automation/v4/actions/{appId}/{definitionId}/functions/{functionType}/{functionId}_createOrReplace",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "definitionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "functionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "functionType",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "POST_ACTION_EXECUTION",
+                                "POST_FETCH_OPTIONS",
+                                "PRE_ACTION_EXECUTION",
+                                "PRE_FETCH_OPTIONS"
+                            ],
+                            "example": null
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "text/plain": {
+                            "schema": {
+                                "type": "string",
+                                "example": null
+                            },
+                            "example": null
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicActionFunctionIdentifier"
+                                },
+                                "example": null
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-write"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Functions"
+                ],
+                "summary": "Archive a function for a definition",
+                "description": "Archive a function for a specific definition.",
+                "operationId": "delete-/automation/v4/actions/{appId}/{definitionId}/functions/{functionType}/{functionId}_archive",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "definitionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "functionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "functionType",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "POST_ACTION_EXECUTION",
+                                "POST_FETCH_OPTIONS",
+                                "PRE_ACTION_EXECUTION",
+                                "PRE_FETCH_OPTIONS"
+                            ],
+                            "example": null
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content",
+                        "content": {}
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-write"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/{appId}/{definitionId}/requires-object": {
+            "get": {
+                "tags": [
+                    "Definitions"
+                ],
+                "summary": "Retrieve the object requirement status for a custom action definition.",
+                "description": "Retrieve whether a custom action definition requires an object.",
+                "operationId": "get-/automation/v4/actions/{appId}/{definitionId}/requires-object_/automation/v4/actions/{appId}/{definitionId}/requires-object",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "definitionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicActionDefinitionRequiresObjectResponse"
+                                },
+                                "example": null
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-read"
+                        ]
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Definitions"
+                ],
+                "summary": "Set the object requirement for a custom action definition.",
+                "description": "Set whether a custom action definition requires an object.",
+                "operationId": "post-/automation/v4/actions/{appId}/{definitionId}/requires-object_/automation/v4/actions/{appId}/{definitionId}/requires-object",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "definitionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PublicActionDefinitionRequiresObjectRequest"
+                            },
+                            "example": null
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content",
+                        "content": {}
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-write"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/{appId}/{definitionId}/revisions": {
+            "get": {
+                "tags": [
+                    "Revisions"
+                ],
+                "summary": "Retrieve revisions for a given definition",
+                "description": "Retrieve the versions of a definition by ID.",
+                "operationId": "get-/automation/v4/actions/{appId}/{definitionId}/revisions_getPage",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "definitionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "after",
+                        "in": "query",
+                        "description": "The paging cursor token of the last successfully read resource will be returned as the `paging.next.after` JSON property of a paged response containing more results",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "The maximum number of results to display per page",
+                        "required": false,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CollectionResponsePublicActionRevisionForwardPaging"
+                                },
+                                "example": null
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-read"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/{appId}/{definitionId}/revisions/{revisionId}": {
+            "get": {
+                "tags": [
+                    "Revisions"
+                ],
+                "summary": "Retrieve a specific revision of a definition",
+                "description": "Retrieve a specific revision of a definition by revision ID.",
+                "operationId": "get-/automation/v4/actions/{appId}/{definitionId}/revisions/{revisionId}_getById",
+                "parameters": [
+                    {
+                        "name": "appId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "definitionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    },
+                    {
+                        "name": "revisionId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": null
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicActionRevision"
+                                },
+                                "example": null
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "developers-read"
+                        ]
+                    }
+                ]
+            }
+        }
     },
-    "/callbacks/complete" : {
-      "post" : {
-        "tags" : [ "Callbacks" ],
-        "summary" : "Completes a batch of callbacks",
-        "operationId" : "post-/callbacks/complete_completeBatch",
-        "parameters" : [ ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/BatchInputCallbackCompletionBatchRequest"
-              }
+    "components": {
+        "schemas": {
+            "TestRequestContext": {
+                "title": "TEST",
+                "required": [
+                    "source"
+                ],
+                "type": "object",
+                "properties": {
+                    "source": {
+                        "type": "string",
+                        "description": "Indicates the source of the test request, with the only accepted value being 'TEST'",
+                        "default": "TEST",
+                        "enum": [
+                            "TEST"
+                        ],
+                        "example": null
+                    }
+                },
+                "x-hubspot-sub-type-impl": true,
+                "example": null,
+                "description": "Context object for test requests indicating the source is a test execution."
+            },
+            "PublicActionFunction": {
+                "required": [
+                    "functionSource",
+                    "functionType"
+                ],
+                "type": "object",
+                "properties": {
+                    "functionSource": {
+                        "type": "string",
+                        "description": "The source code or script that defines the function's behavior",
+                        "example": null
+                    },
+                    "functionType": {
+                        "type": "string",
+                        "description": "The type of function, with accepted values: POST_ACTION_EXECUTION, POST_FETCH_OPTIONS, PRE_ACTION_EXECUTION, PRE_FETCH_OPTIONS",
+                        "enum": [
+                            "POST_ACTION_EXECUTION",
+                            "POST_FETCH_OPTIONS",
+                            "PRE_ACTION_EXECUTION",
+                            "PRE_FETCH_OPTIONS"
+                        ],
+                        "example": null
+                    },
+                    "id": {
+                        "type": "string",
+                        "description": "The unique identifier for the action function",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Defines a function associated with an automation action, including its source code and type."
+            },
+            "PublicFieldTypeDefinition": {
+                "required": [
+                    "name",
+                    "options",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "helpText": {
+                        "type": "string",
+                        "description": "Additional information or guidance about the field",
+                        "example": null
+                    },
+                    "referencedObjectType": {
+                        "type": "string",
+                        "description": "The type of object that the field references, with accepted values including OWNER",
+                        "enum": [
+                            "OWNER"
+                        ],
+                        "example": null
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The internal name used to identify the field",
+                        "example": null
+                    },
+                    "options": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicOption"
+                        },
+                        "example": null,
+                        "description": "Array of available options for enumeration or selection fields."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "A detailed explanation of the field's purpose",
+                        "example": null
+                    },
+                    "label": {
+                        "type": "string",
+                        "description": "A user-friendly name for the field",
+                        "example": null
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "The data type of the field, with accepted values including bool, date, datetime, enumeration, json, number, object_coordinates, phone_number, and string",
+                        "enum": [
+                            "bool",
+                            "date",
+                            "datetime",
+                            "enumeration",
+                            "json",
+                            "number",
+                            "object_coordinates",
+                            "phone_number",
+                            "string"
+                        ],
+                        "example": null
+                    },
+                    "fieldType": {
+                        "type": "string",
+                        "description": "The type of field, with accepted values including booleancheckbox, calculation_equation, checkbox, date, file, html, number, phonenumber, radio, select, text, and textarea",
+                        "enum": [
+                            "booleancheckbox",
+                            "calculation_equation",
+                            "checkbox",
+                            "date",
+                            "file",
+                            "html",
+                            "number",
+                            "phonenumber",
+                            "radio",
+                            "select",
+                            "text",
+                            "textarea"
+                        ],
+                        "example": null
+                    },
+                    "optionsUrl": {
+                        "type": "string",
+                        "description": "A URL that provides options for the field",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Defines the structure and metadata for a field type used in automation actions."
+            },
+            "PublicActionDefinition": {
+                "required": [
+                    "actionUrl",
+                    "functions",
+                    "id",
+                    "inputFields",
+                    "labels",
+                    "objectTypes",
+                    "published",
+                    "revisionId"
+                ],
+                "type": "object",
+                "properties": {
+                    "functions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicActionFunctionIdentifier"
+                        },
+                        "example": null,
+                        "description": "Array of function identifiers associated with this action."
+                    },
+                    "actionUrl": {
+                        "type": "string",
+                        "example": null,
+                        "description": "The URL endpoint where the action is executed."
+                    },
+                    "published": {
+                        "type": "boolean",
+                        "example": null,
+                        "description": "Indicates whether the action definition is published and active."
+                    },
+                    "labels": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "$ref": "#/components/schemas/PublicActionLabels"
+                        },
+                        "example": null,
+                        "description": "Localized labels for the action, keyed by language code."
+                    },
+                    "inputFields": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicInputFieldDefinition"
+                        },
+                        "example": null,
+                        "description": "Array of input field definitions required by the action."
+                    },
+                    "outputFields": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OutputFieldDefinition"
+                        },
+                        "example": null,
+                        "description": "Array of output field definitions produced by the action."
+                    },
+                    "revisionId": {
+                        "type": "string",
+                        "example": null,
+                        "description": "The unique identifier for this revision of the action definition."
+                    },
+                    "archivedAt": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": null,
+                        "description": "Unix timestamp indicating when the action was archived."
+                    },
+                    "inputFieldDependencies": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicActionDefinitionInputFieldDependencies"
+                        },
+                        "example": null,
+                        "description": "Array of dependencies between input fields."
+                    },
+                    "executionRules": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicExecutionTranslationRule"
+                        },
+                        "example": null,
+                        "description": "Array of rules that govern action execution translation."
+                    },
+                    "id": {
+                        "type": "string",
+                        "example": null,
+                        "description": "The unique identifier for the action definition."
+                    },
+                    "objectTypes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "example": null,
+                        "description": "Array of HubSpot object types this action can operate on."
+                    },
+                    "objectRequestOptions": {
+                        "$ref": "#/components/schemas/PublicObjectRequestOptions",
+                        "description": "Configuration options for object requests within the action."
+                    }
+                },
+                "example": null,
+                "description": "Complete definition of an automation action including its configuration, fields, and functions."
+            },
+            "PublicOption": {
+                "required": [
+                    "label",
+                    "value"
+                ],
+                "type": "object",
+                "properties": {
+                    "displayOrder": {
+                        "type": "integer",
+                        "description": "The position of the option relative to others in the list",
+                        "format": "int32",
+                        "example": null
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "A description of the option",
+                        "example": null
+                    },
+                    "label": {
+                        "type": "string",
+                        "description": "A user-friendly label that identifies the option",
+                        "example": null
+                    },
+                    "value": {
+                        "type": "string",
+                        "description": "The actual value of the option",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Represents a selectable option with a label and value for field configurations."
+            },
+            "PublicActionDefinitionRequiresObjectResponse": {
+                "required": [
+                    "requiresObject"
+                ],
+                "type": "object",
+                "properties": {
+                    "requiresObject": {
+                        "type": "boolean",
+                        "description": "Indicates whether a custom action definition requires an object",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Response indicating whether an action definition requires an associated object."
+            },
+            "PublicConditionalSingleFieldDependency": {
+                "title": "CONDITIONAL_SINGLE_FIELD",
+                "required": [
+                    "controllingFieldName",
+                    "controllingFieldValue",
+                    "dependencyType",
+                    "dependentFieldNames"
+                ],
+                "type": "object",
+                "properties": {
+                    "dependencyType": {
+                        "type": "string",
+                        "description": "The type of dependency, with the default value being CONDITIONAL_SINGLE_FIELD",
+                        "default": "CONDITIONAL_SINGLE_FIELD",
+                        "enum": [
+                            "CONDITIONAL_SINGLE_FIELD"
+                        ],
+                        "example": null
+                    },
+                    "controllingFieldName": {
+                        "type": "string",
+                        "description": "The name of the field that determines the dependency",
+                        "example": null
+                    },
+                    "controllingFieldValue": {
+                        "type": "string",
+                        "description": "The value of the controlling field that triggers the dependency",
+                        "example": null
+                    },
+                    "dependentFieldNames": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "example": null,
+                        "description": "Array of field names that depend on the controlling field's value."
+                    }
+                },
+                "x-hubspot-sub-type-impl": true,
+                "example": null,
+                "description": "Defines a conditional dependency where fields depend on a specific controlling field value."
+            },
+            "PublicActionDefinitionInputFieldDependencies": {
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/PublicSingleFieldDependency",
+                        "description": "A single field dependency configuration option."
+                    },
+                    {
+                        "$ref": "#/components/schemas/PublicConditionalSingleFieldDependency",
+                        "description": "A conditional single field dependency configuration option."
+                    }
+                ],
+                "example": null,
+                "description": "Union type representing either a single field or conditional single field dependency."
+            },
+            "ChirpAiContextObject": {
+                "required": [
+                    "applicationGroup",
+                    "applicationId",
+                    "isPrivate",
+                    "metadata",
+                    "otelContextHolder",
+                    "unstructuredSources"
+                ],
+                "type": "object",
+                "properties": {
+                    "trajectoryId": {
+                        "type": "string",
+                        "description": "The identifier for the trajectory, formatted as a UUID",
+                        "format": "uuid",
+                        "example": null
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "description": "Additional metadata related to the context, represented as key-value pairs",
+                        "example": null
+                    },
+                    "otelContextHolder": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "description": "Holds OpenTelemetry context information as key-value pairs",
+                        "example": null
+                    },
+                    "conversationId": {
+                        "type": "string",
+                        "example": null,
+                        "description": "Unique identifier for the conversation session."
+                    },
+                    "applicationGroup": {
+                        "type": "string",
+                        "description": "The group to which the application belongs",
+                        "example": null
+                    },
+                    "inferenceId": {
+                        "type": "string",
+                        "description": "The identifier for the inference associated with the context",
+                        "example": null
+                    },
+                    "unstructuredSources": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "NONE",
+                                "USER_INPUT",
+                                "LOGGED_EMAIL",
+                                "VIDEO_CALL",
+                                "AUDIO_CALL",
+                                "CALL_TRANSCRIPT",
+                                "MEETING_TRANSCRIPT",
+                                "FORMS",
+                                "FEEDBACK_SURVEY",
+                                "PDF",
+                                "QUOTE",
+                                "INVOICE",
+                                "OTHER_ATTACHMENT_DOC",
+                                "WHATSAPP",
+                                "SMS",
+                                "CHAT",
+                                "FACEBOOK_MESSENGER",
+                                "CUSTOM_CHANNEL_OR_API",
+                                "MANY",
+                                "NOTE",
+                                "DERIVED"
+                            ],
+                            "example": null
+                        },
+                        "example": null,
+                        "description": "Array of source types for unstructured data inputs."
+                    },
+                    "isPrivate": {
+                        "type": "boolean",
+                        "example": null,
+                        "description": "Indicates whether the context data is private."
+                    },
+                    "applicationId": {
+                        "type": "string",
+                        "description": "The identifier for the application associated with the context",
+                        "example": null
+                    },
+                    "complianceIds": {
+                        "$ref": "#/components/schemas/ComplianceIds",
+                        "description": "Reference to compliance identifiers associated with the context."
+                    },
+                    "featureId": {
+                        "type": "string",
+                        "description": "The identifier for the feature associated with the context",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Contains AI context information including application details and telemetry data."
+            },
+            "AgentRequestContext": {
+                "title": "AGENTS",
+                "required": [
+                    "agentId",
+                    "chirpAiContextObject",
+                    "source"
+                ],
+                "type": "object",
+                "properties": {
+                    "trajectoryId": {
+                        "type": "string",
+                        "description": "The unique identifier for the trajectory associated with the agent request",
+                        "example": null
+                    },
+                    "agentId": {
+                        "type": "integer",
+                        "description": "The unique identifier for the agent making the request",
+                        "format": "int64",
+                        "example": null
+                    },
+                    "source": {
+                        "type": "string",
+                        "description": "Indicates the source of the request, with the default value being 'AGENTS'",
+                        "default": "AGENTS",
+                        "enum": [
+                            "AGENTS"
+                        ],
+                        "example": null
+                    },
+                    "chirpAiContextObject": {
+                        "$ref": "#/components/schemas/ChirpAiContextObject",
+                        "description": "The AI context object associated with the agent request."
+                    }
+                },
+                "x-hubspot-sub-type-impl": true,
+                "example": null,
+                "description": "Context object for agent-initiated requests containing agent and AI context details."
+            },
+            "ContactId": {
+                "required": [
+                    "portalId"
+                ],
+                "type": "object",
+                "properties": {
+                    "vid": {
+                        "type": "integer",
+                        "description": "The unique identifier for the contact",
+                        "format": "int64",
+                        "example": null
+                    },
+                    "portalId": {
+                        "type": "integer",
+                        "description": "The ID of the portal associated with the contact",
+                        "format": "int32",
+                        "example": null
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "The email address of the contact",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Identifies a contact using portal ID, contact ID, or email address."
+            },
+            "DoubleFieldSchema": {
+                "title": "DOUBLE",
+                "required": [
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "maximum": {
+                        "type": "number",
+                        "description": "The maximum allowable value for the double field",
+                        "example": null
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Indicates the field type as DOUBLE",
+                        "default": "DOUBLE",
+                        "enum": [
+                            "DOUBLE"
+                        ],
+                        "example": null
+                    },
+                    "minimum": {
+                        "type": "number",
+                        "description": "The minimum allowable value for the double field",
+                        "example": null
+                    }
+                },
+                "x-hubspot-sub-type-impl": true,
+                "example": null,
+                "description": "Schema definition for a double-precision floating-point field with optional bounds."
+            },
+            "PublicObjectRequestOptions": {
+                "required": [
+                    "properties"
+                ],
+                "type": "object",
+                "properties": {
+                    "properties": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "example": null,
+                        "description": "Array of property names to include in the request."
+                    }
+                },
+                "example": null,
+                "description": "Configuration options for object requests specifying which properties to include."
+            },
+            "LongFieldSchema": {
+                "title": "LONG",
+                "required": [
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "maximum": {
+                        "type": "integer",
+                        "description": "The maximum value allowed for the long field",
+                        "format": "int64",
+                        "example": null
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "The type of the field, which is LONG by default",
+                        "default": "LONG",
+                        "enum": [
+                            "LONG"
+                        ],
+                        "example": null
+                    },
+                    "minimum": {
+                        "type": "integer",
+                        "description": "The minimum value allowed for the long field",
+                        "format": "int64",
+                        "example": null
+                    }
+                },
+                "x-hubspot-sub-type-impl": true,
+                "example": null,
+                "description": "Schema definition for a 64-bit integer field with optional minimum and maximum values."
+            },
+            "ErrorDetail": {
+                "required": [
+                    "message"
+                ],
+                "type": "object",
+                "properties": {
+                    "subCategory": {
+                        "type": "string",
+                        "description": "A specific category that contains more specific detail about the error",
+                        "example": null
+                    },
+                    "code": {
+                        "type": "string",
+                        "description": "The status code associated with the error detail",
+                        "example": null
+                    },
+                    "in": {
+                        "type": "string",
+                        "description": "The name of the field or parameter in which the error was found",
+                        "example": null
+                    },
+                    "context": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "example": null
+                            },
+                            "example": null
+                        },
+                        "description": "Context about the error condition",
+                        "example": "{missingScopes=[scope1, scope2]}"
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A human readable message describing the error along with remediation steps where appropriate",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Detailed error information including message, code, and contextual data."
+            },
+            "PublicActionLabels": {
+                "required": [
+                    "actionName"
+                ],
+                "type": "object",
+                "properties": {
+                    "inputFieldDescriptions": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "description": "Descriptions for each input field",
+                        "example": null
+                    },
+                    "appDisplayName": {
+                        "type": "string",
+                        "description": "The display name of the application associated with the action",
+                        "example": null
+                    },
+                    "outputFieldLabels": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "description": "Labels for the output fields",
+                        "example": null
+                    },
+                    "actionDescription": {
+                        "type": "string",
+                        "description": "A description of what the action does",
+                        "example": null
+                    },
+                    "executionRules": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "description": "Rules that govern the execution of the action",
+                        "example": null
+                    },
+                    "inputFieldOptionLabels": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string",
+                                "example": null
+                            },
+                            "example": null
+                        },
+                        "description": "Labels for the options available in input fields",
+                        "example": null
+                    },
+                    "actionCardContent": {
+                        "type": "string",
+                        "description": "Content displayed on the action card",
+                        "example": null
+                    },
+                    "actionName": {
+                        "type": "string",
+                        "description": "The name of the action",
+                        "example": null
+                    },
+                    "inputFieldLabels": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "description": "Labels for the input fields",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Defines display labels and descriptions for an action and its input/output fields."
+            },
+            "PublicSingleFieldDependency": {
+                "title": "SINGLE_FIELD",
+                "required": [
+                    "controllingFieldName",
+                    "dependencyType",
+                    "dependentFieldNames"
+                ],
+                "type": "object",
+                "properties": {
+                    "dependencyType": {
+                        "type": "string",
+                        "description": "The type of dependency, with the default value being 'SINGLE_FIELD'",
+                        "default": "SINGLE_FIELD",
+                        "enum": [
+                            "SINGLE_FIELD"
+                        ],
+                        "example": null
+                    },
+                    "controllingFieldName": {
+                        "type": "string",
+                        "description": "The name of the field that controls the dependency",
+                        "example": null
+                    },
+                    "dependentFieldNames": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "example": null,
+                        "description": "Array of field names that depend on the controlling field."
+                    }
+                },
+                "x-hubspot-sub-type-impl": true,
+                "example": null,
+                "description": "Defines a dependency where fields are controlled by another field's presence."
+            },
+            "ActionExecutionIndexIdentifier": {
+                "required": [
+                    "actionExecutionIndex",
+                    "enrollmentId"
+                ],
+                "type": "object",
+                "properties": {
+                    "enrollmentId": {
+                        "type": "integer",
+                        "description": "The ID associated with the enrollment process",
+                        "format": "int64",
+                        "example": null
+                    },
+                    "actionExecutionIndex": {
+                        "type": "integer",
+                        "description": "The index number representing the execution order of the action",
+                        "format": "int32",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Identifies a specific action execution within an enrollment by its index and enrollment ID."
+            },
+            "ForwardPaging": {
+                "type": "object",
+                "properties": {
+                    "next": {
+                        "$ref": "#/components/schemas/NextPage",
+                        "description": "Reference to the next page of results in the paginated response."
+                    }
+                },
+                "example": null,
+                "description": "Contains pagination information for navigating forward through result sets."
+            },
+            "PublicInputFieldDefinition": {
+                "required": [
+                    "isRequired",
+                    "typeDefinition"
+                ],
+                "type": "object",
+                "properties": {
+                    "isRequired": {
+                        "type": "boolean",
+                        "description": "Indicates whether the input field is mandatory",
+                        "example": null
+                    },
+                    "typeDefinition": {
+                        "$ref": "#/components/schemas/PublicFieldTypeDefinition",
+                        "description": "Reference to the field type definition specifying data type and constraints."
+                    },
+                    "supportedValueTypes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "STATIC_VALUE",
+                                "OBJECT_PROPERTY"
+                            ],
+                            "example": null
+                        },
+                        "example": null,
+                        "description": "Array of value types the field accepts (STATIC_VALUE or OBJECT_PROPERTY)."
+                    }
+                },
+                "example": null,
+                "description": "Defines the structure and requirements for an input field in automation actions."
+            },
+            "FieldTypeDefinition": {
+                "required": [
+                    "externalOptions",
+                    "name",
+                    "options",
+                    "schema",
+                    "type",
+                    "useChirp"
+                ],
+                "type": "object",
+                "properties": {
+                    "schema": {
+                        "description": "Defines the structure and constraints of the field",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/IntegerFieldSchema"
+                            },
+                            {
+                                "$ref": "#/components/schemas/LongFieldSchema"
+                            },
+                            {
+                                "$ref": "#/components/schemas/DoubleFieldSchema"
+                            },
+                            {
+                                "$ref": "#/components/schemas/StringFieldSchema"
+                            },
+                            {
+                                "$ref": "#/components/schemas/BooleanFieldSchema"
+                            },
+                            {
+                                "$ref": "#/components/schemas/ArrayFieldSchema"
+                            },
+                            {
+                                "$ref": "#/components/schemas/ObjectFieldSchema"
+                            }
+                        ],
+                        "example": null
+                    },
+                    "helpText": {
+                        "type": "string",
+                        "description": "Additional information or guidance about the field",
+                        "example": null
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "A detailed explanation of the field's purpose and usage",
+                        "example": null
+                    },
+                    "label": {
+                        "type": "string",
+                        "description": "The user-friendly label for the field",
+                        "example": null
+                    },
+                    "useChirp": {
+                        "type": "boolean",
+                        "description": "Specifies whether the field uses the Chirp feature",
+                        "example": null
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Specifies the data type of the field, with accepted values like bool, date, datetime, enumeration, json, number, object_coordinates, phone_number, string",
+                        "enum": [
+                            "bool",
+                            "currency_number",
+                            "date",
+                            "datetime",
+                            "enumeration",
+                            "json",
+                            "number",
+                            "object_coordinates",
+                            "phone_number",
+                            "string"
+                        ],
+                        "example": null
+                    },
+                    "referencedObjectType": {
+                        "type": "string",
+                        "description": "Indicates the type of object that the field references, with accepted values like OWNER",
+                        "enum": [
+                            "ABANDONED_CART",
+                            "ACCEPTANCE_TEST",
+                            "AD",
+                            "AD_ACCOUNT",
+                            "AD_CAMPAIGN",
+                            "AD_GROUP",
+                            "AI_FORECAST",
+                            "ALL_PAGES",
+                            "APPROVAL",
+                            "APPROVAL_STEP",
+                            "ATTRIBUTION",
+                            "AUDIENCE",
+                            "AUTOMATION_JOURNEY",
+                            "AUTOMATION_PLATFORM_FLOW",
+                            "AUTOMATION_PLATFORM_FLOW_ACTION",
+                            "BET_ALERT",
+                            "BET_DELIVERABLE_SERVICE",
+                            "BLOG_LISTING_PAGE",
+                            "BLOG_POST",
+                            "CALL",
+                            "CAMPAIGN",
+                            "CAMPAIGN_BUDGET_ITEM",
+                            "CAMPAIGN_SPEND_ITEM",
+                            "CAMPAIGN_STEP",
+                            "CAMPAIGN_TEMPLATE",
+                            "CAMPAIGN_TEMPLATE_STEP",
+                            "CART",
+                            "CASE_STUDY",
+                            "CHATFLOW",
+                            "CLIP",
+                            "CMS_URL",
+                            "COMBO_EVENT_CONFIGURATION",
+                            "COMMERCE_PAYMENT",
+                            "COMMUNICATION",
+                            "COMPANY",
+                            "CONTACT",
+                            "CONTACT_CREATE_ATTRIBUTION",
+                            "CONTENT",
+                            "CONTENT_AUDIT",
+                            "CONTENT_AUDIT_PAGE",
+                            "CONVERSATION",
+                            "CONVERSATION_INBOX",
+                            "CONVERSATION_SESSION",
+                            "CRM_OBJECTS_DUMMY_TYPE",
+                            "CRM_PIPELINES_DUMMY_TYPE",
+                            "CTA",
+                            "CTA_VARIANT",
+                            "DATA_PRIVACY_CONSENT",
+                            "DATA_SYNC_STATE",
+                            "DEAL",
+                            "DEAL_CREATE_ATTRIBUTION",
+                            "DEAL_REGISTRATION",
+                            "DEAL_SPLIT",
+                            "DISCOUNT",
+                            "DISCOUNT_CODE",
+                            "DISCOUNT_TEMPLATE",
+                            "EMAIL",
+                            "ENGAGEMENT",
+                            "EXPORT",
+                            "EXTERNAL_WEB_URL",
+                            "FEE",
+                            "FEEDBACK_SUBMISSION",
+                            "FEEDBACK_SURVEY",
+                            "FILE_MANAGER_FILE",
+                            "FILE_MANAGER_FOLDER",
+                            "FOLDER",
+                            "FORECAST",
+                            "FORM",
+                            "FORM_SUBMISSION_INBOUNDDB",
+                            "GOAL_TARGET",
+                            "GOAL_TARGET_GROUP",
+                            "GOAL_TEMPLATE",
+                            "GSC_PROPERTY",
+                            "HUB",
+                            "IMPORT",
+                            "INVOICE",
+                            "KEYWORD",
+                            "KNOWLEDGE_ARTICLE",
+                            "LANDING_PAGE",
+                            "LEAD",
+                            "LINE_ITEM",
+                            "MARKETING_CALENDAR",
+                            "MARKETING_CAMPAIGN_UTM",
+                            "MARKETING_EMAIL",
+                            "MARKETING_EVENT",
+                            "MARKETING_EVENT_ATTENDANCE",
+                            "MARKETING_SMS",
+                            "MEDIA_BRIDGE",
+                            "MEETING_EVENT",
+                            "MIC",
+                            "NOTE",
+                            "OBJECT_LIST",
+                            "ORDER",
+                            "OWNER",
+                            "PARTNER_ACCOUNT",
+                            "PARTNER_CLIENT",
+                            "PARTNER_CLIENT_REVENUE",
+                            "PARTNER_SERVICE",
+                            "PAYMENT_LINK",
+                            "PAYMENT_SCHEDULE",
+                            "PAYMENT_SCHEDULE_INSTALLMENT",
+                            "PERMISSIONS_TESTING",
+                            "PLAYBOOK",
+                            "PLAYBOOK_QUESTION",
+                            "PLAYBOOK_SUBMISSION",
+                            "PLAYBOOK_SUBMISSION_ANSWER",
+                            "PLAYLIST",
+                            "PLAYLIST_FOLDER",
+                            "PODCAST_EPISODE",
+                            "PORTAL",
+                            "PORTAL_OBJECT_SYNC_MESSAGE",
+                            "POSTAL_MAIL",
+                            "PRIVACY_SCANNER_COOKIE",
+                            "PRODUCT",
+                            "PRODUCT_OR_FOLDER",
+                            "PROPERTY_INFO",
+                            "PROSPECTING_AGENT_CONTACT_ASSIGNMENT",
+                            "PUBLISHING_TASK",
+                            "QUARANTINED_SUBMISSION",
+                            "QUOTA",
+                            "QUOTE",
+                            "QUOTE_FIELD",
+                            "QUOTE_MODULE",
+                            "QUOTE_MODULE_FIELD",
+                            "QUOTE_TEMPLATE",
+                            "RESTORABLE_CRM_OBJECT",
+                            "ROSTER",
+                            "ROSTER_MEMBER",
+                            "SALES_DOCUMENT",
+                            "SALES_TASK",
+                            "SALES_WORKLOAD",
+                            "SALESFORCE_SYNC_ERROR",
+                            "SCHEDULING_PAGE",
+                            "SCHEMAS_BACKEND_TEST",
+                            "SCORE_CONFIGURATION",
+                            "SEQUENCE",
+                            "SEQUENCE_ENROLLMENT",
+                            "SEQUENCE_STEP",
+                            "SEQUENCE_STEP_ENROLLMENT",
+                            "SERVICE",
+                            "SITE_PAGE",
+                            "SNIPPET",
+                            "SOCIAL_BROADCAST",
+                            "SOCIAL_CHANNEL",
+                            "SOCIAL_POST",
+                            "SOCIAL_PROFILE",
+                            "SOX_PROTECTED_DUMMY_TYPE",
+                            "SOX_PROTECTED_TEST_TYPE",
+                            "SUBMISSION_TAG",
+                            "SUBSCRIPTION",
+                            "TASK",
+                            "TASK_TEMPLATE",
+                            "TAX",
+                            "TEMPLATE",
+                            "TICKET",
+                            "UNKNOWN",
+                            "UNSUBSCRIBE",
+                            "USER",
+                            "VIEW",
+                            "VIEW_BLOCK",
+                            "WEB_INTERACTIVE"
+                        ],
+                        "example": null
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The unique identifier for the field",
+                        "example": null
+                    },
+                    "options": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Option"
+                        },
+                        "example": null,
+                        "description": "Array of available option values for selection-based fields."
+                    },
+                    "externalOptionsReferenceType": {
+                        "type": "string",
+                        "description": "Specifies the type of external reference for options",
+                        "example": null
+                    },
+                    "externalOptions": {
+                        "type": "boolean",
+                        "description": "Indicates whether the field's options are sourced externally",
+                        "example": null
+                    },
+                    "fieldType": {
+                        "type": "string",
+                        "description": "Describes the field's type in the UI, with accepted values like booleancheckbox, calculation_equation, checkbox, date, file, html, number, phonenumber, radio, select, text, textarea, unknown",
+                        "enum": [
+                            "booleancheckbox",
+                            "calculation_equation",
+                            "calculation_read_time",
+                            "calculation_rollup",
+                            "calculation_score",
+                            "checkbox",
+                            "date",
+                            "file",
+                            "html",
+                            "number",
+                            "phonenumber",
+                            "radio",
+                            "select",
+                            "text",
+                            "textarea",
+                            "unknown"
+                        ],
+                        "example": null
+                    },
+                    "optionsUrl": {
+                        "type": "string",
+                        "description": "A URL that provides options for the field",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Comprehensive definition of a field's type, schema, options, and display properties."
+            },
+            "CollectionResponsePublicActionFunctionIdentifierNoPaging": {
+                "required": [
+                    "results"
+                ],
+                "type": "object",
+                "properties": {
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicActionFunctionIdentifier"
+                        },
+                        "example": null,
+                        "description": "Array of action function identifiers returned in the response."
+                    }
+                },
+                "example": null,
+                "description": "Response containing a collection of action function identifiers without pagination."
+            },
+            "StandaloneRequestContext": {
+                "title": "STANDALONE",
+                "required": [
+                    "chirpAiContextObject",
+                    "source"
+                ],
+                "type": "object",
+                "properties": {
+                    "trajectoryId": {
+                        "type": "string",
+                        "description": "A unique identifier for tracking the trajectory of the request",
+                        "example": null
+                    },
+                    "source": {
+                        "type": "string",
+                        "description": "Indicates the source of the request, with the default value being 'STANDALONE'",
+                        "default": "STANDALONE",
+                        "enum": [
+                            "STANDALONE"
+                        ],
+                        "example": null
+                    },
+                    "chirpAiContextObject": {
+                        "$ref": "#/components/schemas/ChirpAiContextObject",
+                        "description": "Reference to the Chirp AI context object for the standalone request."
+                    }
+                },
+                "x-hubspot-sub-type-impl": true,
+                "example": null,
+                "description": "Request context for standalone automation actions not tied to a workflow."
+            },
+            "IntegerFieldSchema": {
+                "title": "INTEGER",
+                "required": [
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "maximum": {
+                        "type": "integer",
+                        "description": "The maximum value allowed for the integer field",
+                        "format": "int32",
+                        "example": null
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "The type of the field, which is set to INTEGER",
+                        "default": "INTEGER",
+                        "enum": [
+                            "INTEGER"
+                        ],
+                        "example": null
+                    },
+                    "minimum": {
+                        "type": "integer",
+                        "description": "The minimum value allowed for the integer field",
+                        "format": "int32",
+                        "example": null
+                    }
+                },
+                "x-hubspot-sub-type-impl": true,
+                "example": null,
+                "description": "Schema definition for integer fields with optional minimum and maximum constraints."
+            },
+            "PublicExecutionTranslationRule": {
+                "required": [
+                    "conditions",
+                    "labelName"
+                ],
+                "type": "object",
+                "properties": {
+                    "conditions": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "object",
+                            "properties": {},
+                            "example": null
+                        },
+                        "description": "Defines the conditions that must be met for the execution rule to apply",
+                        "example": null
+                    },
+                    "labelName": {
+                        "type": "string",
+                        "description": "Specifies the name of the label associated with the execution rule",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Defines translation rules for action execution based on specified conditions."
+            },
+            "WorkflowsRequestContext": {
+                "title": "WORKFLOWS",
+                "required": [
+                    "source",
+                    "workflowId"
+                ],
+                "type": "object",
+                "properties": {
+                    "actionExecutionIndexIdentifier": {
+                        "$ref": "#/components/schemas/ActionExecutionIndexIdentifier",
+                        "description": "Reference to the action execution index identifier within the workflow."
+                    },
+                    "actionId": {
+                        "type": "integer",
+                        "description": "The ID of the action within the workflow context",
+                        "format": "int64",
+                        "example": null
+                    },
+                    "source": {
+                        "type": "string",
+                        "description": "Indicates the source of the request, with the default value being WORKFLOWS",
+                        "default": "WORKFLOWS",
+                        "enum": [
+                            "WORKFLOWS"
+                        ],
+                        "example": null
+                    },
+                    "workflowId": {
+                        "type": "integer",
+                        "description": "The ID of the workflow associated with the request context",
+                        "format": "int64",
+                        "example": null
+                    }
+                },
+                "x-hubspot-sub-type-impl": true,
+                "example": null,
+                "description": "Request context containing workflow and action identifiers for workflow-based requests."
+            },
+            "ComplianceIds": {
+                "required": [
+                    "contactIds",
+                    "portalIds",
+                    "userIds"
+                ],
+                "type": "object",
+                "properties": {
+                    "noContactIdReason": {
+                        "type": "string",
+                        "description": "The reason why no contact ID is available",
+                        "example": null
+                    },
+                    "noPortalIdReason": {
+                        "type": "string",
+                        "description": "The reason why no portal ID is available",
+                        "example": null
+                    },
+                    "userIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        },
+                        "example": null,
+                        "description": "Array of user IDs associated with compliance tracking."
+                    },
+                    "portalIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": null
+                        },
+                        "example": null,
+                        "description": "Array of portal IDs associated with compliance tracking."
+                    },
+                    "noUserIdReason": {
+                        "type": "string",
+                        "description": "The reason why no user ID is available",
+                        "example": null
+                    },
+                    "contactIds": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ContactId"
+                        },
+                        "example": null,
+                        "description": "Array of contact identifiers for compliance tracking."
+                    }
+                },
+                "example": null,
+                "description": "Contains compliance-related identifiers for contacts, portals, and users."
+            },
+            "PublicActionFunctionIdentifier": {
+                "required": [
+                    "functionType"
+                ],
+                "type": "object",
+                "properties": {
+                    "functionType": {
+                        "type": "string",
+                        "description": "The type of function, with accepted values: POST_ACTION_EXECUTION, POST_FETCH_OPTIONS, PRE_ACTION_EXECUTION, PRE_FETCH_OPTIONS",
+                        "enum": [
+                            "POST_ACTION_EXECUTION",
+                            "POST_FETCH_OPTIONS",
+                            "PRE_ACTION_EXECUTION",
+                            "PRE_FETCH_OPTIONS"
+                        ],
+                        "example": null
+                    },
+                    "id": {
+                        "type": "string",
+                        "description": "The unique identifier for the function",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Identifies a function by its type and unique identifier within an automation action."
+            },
+            "PublicActionRevision": {
+                "required": [
+                    "createdAt",
+                    "definition",
+                    "id",
+                    "revisionId"
+                ],
+                "type": "object",
+                "properties": {
+                    "revisionId": {
+                        "type": "string",
+                        "description": "The unique identifier for the specific revision of the action",
+                        "example": null
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "description": "The date and time when the action revision was created",
+                        "format": "date-time",
+                        "example": null
+                    },
+                    "definition": {
+                        "$ref": "#/components/schemas/PublicActionDefinition",
+                        "description": "The complete action definition for this revision."
+                    },
+                    "id": {
+                        "type": "string",
+                        "description": "The unique identifier for the action revision",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Represents a specific revision of an automation action with its definition and metadata."
+            },
+            "CallbackCompletionRequest": {
+                "required": [
+                    "outputFields",
+                    "typedOutputs"
+                ],
+                "type": "object",
+                "properties": {
+                    "outputFields": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "description": "Contains the output fields associated with the callback, with each field represented as a key-value pair",
+                        "example": null
+                    },
+                    "typedOutputs": {
+                        "type": "object",
+                        "properties": {},
+                        "description": "Holds the typed outputs related to the callback, structured as an object",
+                        "example": null
+                    },
+                    "requestContext": {
+                        "description": "Specifies the context in which the request is made, which can be one of several predefined contexts",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/WorkflowsRequestContext"
+                            },
+                            {
+                                "$ref": "#/components/schemas/AgentRequestContext"
+                            },
+                            {
+                                "$ref": "#/components/schemas/CopilotRequestContext"
+                            },
+                            {
+                                "$ref": "#/components/schemas/StandaloneRequestContext"
+                            },
+                            {
+                                "$ref": "#/components/schemas/TestRequestContext"
+                            }
+                        ],
+                        "example": null
+                    },
+                    "failureReasonType": {
+                        "type": "string",
+                        "description": "Indicates the reason for the failure of a callback completion",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Request payload for completing an automation callback with output fields and context."
+            },
+            "CollectionResponsePublicActionDefinitionForwardPaging": {
+                "required": [
+                    "results"
+                ],
+                "type": "object",
+                "properties": {
+                    "paging": {
+                        "$ref": "#/components/schemas/ForwardPaging",
+                        "description": "Pagination information for navigating through results."
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicActionDefinition"
+                        },
+                        "example": null,
+                        "description": "Array of public action definitions returned in the response."
+                    }
+                },
+                "example": null,
+                "description": "Paginated response containing a collection of public action definitions."
+            },
+            "CopilotRequestContext": {
+                "title": "COPILOT",
+                "required": [
+                    "source"
+                ],
+                "type": "object",
+                "properties": {
+                    "trajectoryId": {
+                        "type": "string",
+                        "description": "The unique identifier for the trajectory",
+                        "example": null
+                    },
+                    "source": {
+                        "type": "string",
+                        "description": "Indicates the source of the request, with the default value being 'COPILOT'",
+                        "default": "COPILOT",
+                        "enum": [
+                            "COPILOT"
+                        ],
+                        "example": null
+                    }
+                },
+                "x-hubspot-sub-type-impl": true,
+                "example": null,
+                "description": "Request context indicating the request originated from HubSpot Copilot."
+            },
+            "Error": {
+                "required": [
+                    "category",
+                    "correlationId",
+                    "message"
+                ],
+                "type": "object",
+                "properties": {
+                    "subCategory": {
+                        "type": "string",
+                        "description": "A specific category that contains more specific detail about the error",
+                        "example": null
+                    },
+                    "context": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "example": null
+                            },
+                            "example": null
+                        },
+                        "description": "Context about the error condition",
+                        "example": "{invalidPropertyName=[propertyValue], missingScopes=[scope1, scope2]}"
+                    },
+                    "correlationId": {
+                        "type": "string",
+                        "description": "A unique identifier for the request. Include this value with any error reports or support tickets",
+                        "format": "uuid",
+                        "example": "aeb5f871-7f07-4993-9211-075dc63e7cbf"
+                    },
+                    "links": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "description": "A map of link names to associated URIs containing documentation about the error or recommended remediation steps",
+                        "example": null
+                    },
+                    "category": {
+                        "type": "string",
+                        "description": "The error category",
+                        "example": null
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A human readable message describing the error along with remediation steps where appropriate",
+                        "example": "An error occurred"
+                    },
+                    "errors": {
+                        "type": "array",
+                        "description": "further information about the error",
+                        "items": {
+                            "$ref": "#/components/schemas/ErrorDetail"
+                        },
+                        "example": null
+                    }
+                },
+                "example": {
+                    "message": "Invalid input (details will vary based on the error)",
+                    "correlationId": "aeb5f871-7f07-4993-9211-075dc63e7cbf",
+                    "category": "VALIDATION_ERROR",
+                    "links": {
+                        "knowledge-base": "https://www.hubspot.com/products/service/knowledge-base"
+                    }
+                },
+                "description": "Standard error response containing details about the failure and remediation guidance."
+            },
+            "CollectionResponsePublicActionRevisionForwardPaging": {
+                "required": [
+                    "results"
+                ],
+                "type": "object",
+                "properties": {
+                    "paging": {
+                        "$ref": "#/components/schemas/ForwardPaging",
+                        "description": "Pagination information for navigating through revision results."
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicActionRevision"
+                        },
+                        "example": null,
+                        "description": "Array of public action revisions returned in the response."
+                    }
+                },
+                "example": null,
+                "description": "Paginated response containing a collection of public action revisions."
+            },
+            "PublicActionDefinitionRequiresObjectRequest": {
+                "required": [
+                    "requiresObject"
+                ],
+                "type": "object",
+                "properties": {
+                    "requiresObject": {
+                        "type": "boolean",
+                        "description": "Indicates whether a custom action definition requires an associated object",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Request payload specifying whether an action definition requires an associated object."
+            },
+            "StringFieldSchema": {
+                "title": "STRING",
+                "required": [
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "format": {
+                        "type": "string",
+                        "description": "Specifies the format of the string, with accepted values: DATE, DATE_TIME, OBJECT_COORDINATE, TIME, URI",
+                        "enum": [
+                            "DATE",
+                            "DATE_TIME",
+                            "OBJECT_COORDINATE",
+                            "TIME",
+                            "URI"
+                        ],
+                        "example": null
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Indicates that the type is a string, with the default value being STRING",
+                        "default": "STRING",
+                        "enum": [
+                            "STRING"
+                        ],
+                        "example": null
+                    }
+                },
+                "x-hubspot-sub-type-impl": true,
+                "example": null,
+                "description": "Schema definition for string-type fields with optional format specification."
+            },
+            "CallbackCompletionBatchRequest": {
+                "required": [
+                    "callbackId",
+                    "outputFields",
+                    "typedOutputs"
+                ],
+                "type": "object",
+                "properties": {
+                    "outputFields": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "description": "Holds the output fields for the callback completion",
+                        "example": null
+                    },
+                    "typedOutputs": {
+                        "type": "object",
+                        "properties": {},
+                        "description": "Contains the typed outputs for the callback completion",
+                        "example": null
+                    },
+                    "requestContext": {
+                        "description": "Defines the context of the request, which can be one of several predefined types",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/WorkflowsRequestContext"
+                            },
+                            {
+                                "$ref": "#/components/schemas/AgentRequestContext"
+                            },
+                            {
+                                "$ref": "#/components/schemas/CopilotRequestContext"
+                            },
+                            {
+                                "$ref": "#/components/schemas/StandaloneRequestContext"
+                            },
+                            {
+                                "$ref": "#/components/schemas/TestRequestContext"
+                            }
+                        ],
+                        "example": null
+                    },
+                    "callbackId": {
+                        "type": "string",
+                        "description": "The unique identifier for the callback",
+                        "example": null
+                    },
+                    "failureReasonType": {
+                        "type": "string",
+                        "description": "Specifies the type of failure reason for the callback completion",
+                        "example": null
+                    }
+                },
+                "example": null,
+                "description": "Batch request payload for completing multiple automation callbacks simultaneously."
+            },
+            "PublicActionDefinitionEgg": {
+                "required": [
+                    "actionUrl",
+                    "functions",
+                    "inputFields",
+                    "labels",
+                    "objectTypes",
+                    "published"
+                ],
+                "type": "object",
+                "properties": {
+                    "inputFields": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicInputFieldDefinition"
+                        },
+                        "example": null,
+                        "description": "Array of input field definitions required by the action."
+                    },
+                    "outputFields": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OutputFieldDefinition"
+                        },
+                        "example": null,
+                        "description": "Array of output field definitions produced by the action."
+                    },
+                    "archivedAt": {
+                        "type": "integer",
+                        "description": "The timestamp indicating when the action was archived",
+                        "format": "int64",
+                        "example": null
+                    },
+                    "functions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicActionFunction"
+                        },
+                        "example": null,
+                        "description": "Array of functions associated with the action execution."
+                    },
+                    "actionUrl": {
+                        "type": "string",
+                        "description": "The URL endpoint where the action is executed",
+                        "example": null
+                    },
+                    "inputFieldDependencies": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicActionDefinitionInputFieldDependencies"
+                        },
+                        "example": null,
+                        "description": "Array of dependencies between input fields for conditional field behavior."
+                    },
+                    "executionRules": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicExecutionTranslationRule"
+                        },
+                        "example": null,
+                        "description": "Array of translation rules applied during action execution."
+                    },
+                    "published": {
+                        "type": "boolean",
+                        "description": "Indicates whether the action is published and available for use",
+                        "example": null
+                    },
+                    "objectTypes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "example": null,
+                        "description": "Array of HubSpot object types this action can operate on."
+                    },
+                    "labels": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "$ref": "#/components/schemas/PublicActionLabels"
+                        },
+                        "description": "Holds various labels associated with the action, including names and descriptions",
+                        "example": null
+                    },
+                    "objectRequestOptions": {
+                        "$ref": "#/components/schemas/PublicObjectRequestOptions",
+                        "description": "Configuration options for object data requests during action execution."
+                    }
+                },
+                "example": null,
+                "description": "Template for creating a new public action definition with all required configurations."
+            },
+            "PublicActionDefinitionPatch": {
+                "type": "object",
+                "properties": {
+                    "inputFields": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicInputFieldDefinition"
+                        },
+                        "example": null,
+                        "description": "Array of input field definitions for the action."
+                    },
+                    "outputFields": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OutputFieldDefinition"
+                        },
+                        "example": null,
+                        "description": "Array of output field definitions returned by the action."
+                    },
+                    "actionUrl": {
+                        "type": "string",
+                        "description": "The URL endpoint where the action is executed",
+                        "example": null
+                    },
+                    "inputFieldDependencies": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicActionDefinitionInputFieldDependencies"
+                        },
+                        "example": null,
+                        "description": "Array of dependencies between input fields for conditional behavior."
+                    },
+                    "executionRules": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PublicExecutionTranslationRule"
+                        },
+                        "example": null,
+                        "description": "Array of translation rules applied during action execution."
+                    },
+                    "published": {
+                        "type": "boolean",
+                        "description": "Indicates whether the action is published and available for use",
+                        "example": null
+                    },
+                    "objectTypes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "example": null
+                        },
+                        "example": null,
+                        "description": "Array of HubSpot object types this action can operate on."
+                    },
+                    "labels": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "$ref": "#/components/schemas/PublicActionLabels"
+                        },
+                        "description": "Contains labels for the action, including names and descriptions",
+                        "example": null
+                    },
+                    "objectRequestOptions": {
+                        "$ref": "#/components/schemas/PublicObjectRequestOptions",
+                        "description": "Configuration options for object data requests during action execution."
+                    }
+                },
+                "example": null,
+                "description": "Schema for partially updating an existing automation action definition."
+            },
+            "BatchInputCallbackCompletionBatchRequest": {
+                "required": [
+                    "inputs"
+                ],
+                "type": "object",
+                "properties": {
+                    "inputs": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CallbackCompletionBatchRequest"
+                        },
+                        "example": null,
+                        "description": "Array of callback completion requests to process in batch."
+                    }
+                },
+                "example": null,
+                "description": "Container for batch callback completion requests."
+            },
+            "ArrayFieldSchema": {
+                "title": "ARRAY",
+                "required": [
+                    "items",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "Specifies that the field is of type 'ARRAY'",
+                        "default": "ARRAY",
+                        "enum": [
+                            "ARRAY"
+                        ],
+                        "example": null
+                    },
+                    "items": {
+                        "description": "Defines the type of elements contained within the array, which can be an integer, long, double, string, boolean, another array, or an object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/IntegerFieldSchema"
+                            },
+                            {
+                                "$ref": "#/components/schemas/LongFieldSchema"
+                            },
+                            {
+                                "$ref": "#/components/schemas/DoubleFieldSchema"
+                            },
+                            {
+                                "$ref": "#/components/schemas/StringFieldSchema"
+                            },
+                            {
+                                "$ref": "#/components/schemas/BooleanFieldSchema"
+                            },
+                            {
+                                "$ref": "#/components/schemas/ArrayFieldSchema"
+                            },
+                            {
+                                "$ref": "#/components/schemas/ObjectFieldSchema"
+                            }
+                        ],
+                        "example": null
+                    }
+                },
+                "x-hubspot-sub-type-impl": true,
+                "example": null,
+                "description": "Schema definition for array-type fields containing typed elements."
+            },
+            "BooleanFieldSchema": {
+                "title": "BOOLEAN",
+                "required": [
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "Specifies the field type as BOOLEAN, indicating that the field can hold a true or false value",
+                        "default": "BOOLEAN",
+                        "enum": [
+                            "BOOLEAN"
+                        ],
+                        "example": null
+                    }
+                },
+                "x-hubspot-sub-type-impl": true,
+                "example": null,
+                "description": "Schema definition for boolean-type fields holding true or false values."
+            },
+            "Option": {
+                "required": [
+                    "description",
+                    "displayOrder",
+                    "doubleData",
+                    "hidden",
+                    "label",
+                    "readOnly",
+                    "value"
+                ],
+                "type": "object",
+                "properties": {
+                    "hidden": {
+                        "type": "boolean",
+                        "description": "Whether the option is displayed in HubSpot's UI",
+                        "example": null
+                    },
+                    "displayOrder": {
+                        "type": "integer",
+                        "description": "The position of the item relative to others in the list",
+                        "format": "int32",
+                        "example": null
+                    },
+                    "doubleData": {
+                        "type": "number",
+                        "description": "A numerical value associated with the option",
+                        "example": null
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "A description of the option",
+                        "example": null
+                    },
+                    "readOnly": {
+                        "type": "boolean",
+                        "description": "Whether the option is read-only",
+                        "example": null
+                    },
+                    "label": {
+                        "type": "string",
+                        "description": "A user-friendly label that identifies the option",
+                        "example": null
+                    },
+                    "value": {
+                        "type": "string",
+                        "description": "The actual value of the option",
+                        "example": null
+                    }
+                },
+                "description": "A HubSpot property option",
+                "example": null
+            },
+            "OutputFieldDefinition": {
+                "required": [
+                    "typeDefinition"
+                ],
+                "type": "object",
+                "properties": {
+                    "typeDefinition": {
+                        "$ref": "#/components/schemas/FieldTypeDefinition",
+                        "description": "The type definition specifying the output field's data type."
+                    }
+                },
+                "example": null,
+                "description": "Defines an output field returned by an automation action."
+            },
+            "NextPage": {
+                "required": [
+                    "after"
+                ],
+                "type": "object",
+                "properties": {
+                    "link": {
+                        "type": "string",
+                        "description": "A URL that can be used to retrieve the next page results",
+                        "example": null
+                    },
+                    "after": {
+                        "type": "string",
+                        "description": "A paging cursor token for retrieving subsequent pages",
+                        "example": null
+                    }
+                },
+                "description": "Specifies the paging information needed to retrieve the next set of results in a paginated API response",
+                "example": null
+            },
+            "ObjectFieldSchema": {
+                "title": "OBJECT",
+                "required": [
+                    "properties",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "Specifies the type of the field, which is 'OBJECT' by default",
+                        "default": "OBJECT",
+                        "enum": [
+                            "OBJECT"
+                        ],
+                        "example": null
+                    },
+                    "properties": {
+                        "type": "object",
+                        "properties": {},
+                        "description": "Contains the properties of the object",
+                        "example": null
+                    }
+                },
+                "x-hubspot-sub-type-impl": true,
+                "example": null,
+                "description": "Schema definition for object-type fields with nested properties."
             }
-          },
-          "required" : true
         },
-        "responses" : {
-          "204" : {
-            "description" : "No content",
-            "content" : { }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
+        "responses": {
+            "Error": {
+                "description": "An error occurred.",
+                "content": {
+                    "*/*": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "example": null
+                    }
+                }
+            }
         },
-        "security" : [ {
-          "oauth2_legacy" : [ "automation" ]
-        }, {
-          "private_apps_legacy" : [ "automation" ]
-        } ]
-      }
+        "securitySchemes": {
+            "developer_hapikey": {
+                "type": "apiKey",
+                "name": "hapikey",
+                "in": "query"
+            },
+            "hapikey": {
+                "type": "apiKey",
+                "name": "hapikey",
+                "in": "query"
+            },
+            "oauth2": {
+                "type": "oauth2",
+                "flows": {
+                    "authorizationCode": {
+                        "authorizationUrl": "https://app.hubspot.com/oauth/authorize",
+                        "tokenUrl": "https://api.hubapi.com/oauth/v1/token",
+                        "scopes": {
+                            "developers-read": "",
+                            "developers-write": "",
+                            "workflows-access": ""
+                        }
+                    }
+                }
+            },
+            "private_apps": {
+                "type": "apiKey",
+                "name": "private-app",
+                "in": "header",
+                "x-ballerina-name": "privateApp"
+            },
+            "private_apps_legacy": {
+                "type": "apiKey",
+                "name": "private-app-legacy",
+                "in": "header",
+                "x-ballerina-name": "privateAppLegacy"
+            }
+        }
     },
-    "/{appId}" : {
-      "get" : {
-        "tags" : [ "Definitions" ],
-        "summary" : "Get paged extension definitions",
-        "operationId" : "get-/{appId}_getPage",
-        "parameters" : [ {
-          "name" : "limit",
-          "in" : "query",
-          "description" : "The maximum number of results to display per page",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        }, {
-          "name" : "after",
-          "in" : "query",
-          "description" : "The paging cursor token of the last successfully read resource will be returned as the `paging.next.after` JSON property of a paged response containing more results",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "archived",
-          "in" : "query",
-          "description" : "Whether to return only results that have been archived",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "boolean",
-            "default" : false
-          }
-        }, {
-          "name" : "appId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CollectionResponsePublicActionDefinitionForwardPaging"
-                }
-              }
-            }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
-        },
-        "security" : [ {
-          "developer_hapikey" : [ ]
-        } ]
-      },
-      "post" : {
-        "tags" : [ "Definitions" ],
-        "summary" : "Create a new extension definition",
-        "operationId" : "post-/{appId}_create",
-        "parameters" : [ {
-          "name" : "appId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/PublicActionDefinitionEgg"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "201" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/PublicActionDefinition"
-                }
-              }
-            }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
-        },
-        "security" : [ {
-          "developer_hapikey" : [ ]
-        } ]
-      }
-    },
-    "/{appId}/{definitionId}/functions" : {
-      "get" : {
-        "tags" : [ "Functions" ],
-        "summary" : "Get all functions for a given definition",
-        "operationId" : "get-/{appId}/{definitionId}/functions_getPage",
-        "parameters" : [ {
-          "name" : "definitionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "appId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CollectionResponsePublicActionFunctionIdentifierNoPaging"
-                }
-              }
-            }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
-        },
-        "security" : [ {
-          "developer_hapikey" : [ ]
-        } ]
-      }
-    },
-    "/{appId}/{definitionId}/functions/{functionType}" : {
-      "get" : {
-        "tags" : [ "Functions" ],
-        "summary" : "Get all functions by a type for a given definition",
-        "operationId" : "get-/{appId}/{definitionId}/functions/{functionType}_getByFunctionType",
-        "parameters" : [ {
-          "name" : "definitionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "functionType",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "PRE_ACTION_EXECUTION", "PRE_FETCH_OPTIONS", "POST_FETCH_OPTIONS", "POST_ACTION_EXECUTION" ]
-          }
-        }, {
-          "name" : "appId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/PublicActionFunction"
-                }
-              }
-            }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
-        },
-        "security" : [ {
-          "developer_hapikey" : [ ]
-        } ]
-      },
-      "put" : {
-        "tags" : [ "Functions" ],
-        "summary" : "Insert a function for a definition",
-        "operationId" : "put-/{appId}/{definitionId}/functions/{functionType}_createOrReplaceByFunctionType",
-        "parameters" : [ {
-          "name" : "definitionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "functionType",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "PRE_ACTION_EXECUTION", "PRE_FETCH_OPTIONS", "POST_FETCH_OPTIONS", "POST_ACTION_EXECUTION" ]
-          }
-        }, {
-          "name" : "appId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "text/plain" : {
-              "schema" : {
-                "type" : "string"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/PublicActionFunctionIdentifier"
-                }
-              }
-            }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
-        },
-        "security" : [ {
-          "developer_hapikey" : [ ]
-        } ]
-      },
-      "delete" : {
-        "tags" : [ "Functions" ],
-        "summary" : "Delete a function for a definition",
-        "operationId" : "delete-/{appId}/{definitionId}/functions/{functionType}_archiveByFunctionType",
-        "parameters" : [ {
-          "name" : "definitionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "functionType",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "PRE_ACTION_EXECUTION", "PRE_FETCH_OPTIONS", "POST_FETCH_OPTIONS", "POST_ACTION_EXECUTION" ]
-          }
-        }, {
-          "name" : "appId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "204" : {
-            "description" : "No content",
-            "content" : { }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
-        },
-        "security" : [ {
-          "developer_hapikey" : [ ]
-        } ]
-      }
-    },
-    "/{appId}/{definitionId}/revisions/{revisionId}" : {
-      "get" : {
-        "tags" : [ "Revisions" ],
-        "summary" : "Gets a revision for a given definition by revision id",
-        "operationId" : "get-/{appId}/{definitionId}/revisions/{revisionId}_getById",
-        "parameters" : [ {
-          "name" : "definitionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "revisionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "appId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/PublicActionRevision"
-                }
-              }
-            }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
-        },
-        "security" : [ {
-          "developer_hapikey" : [ ]
-        } ]
-      }
-    },
-    "/{appId}/{definitionId}" : {
-      "get" : {
-        "tags" : [ "Definitions" ],
-        "summary" : "Get extension definition by Id",
-        "operationId" : "get-/{appId}/{definitionId}_getById",
-        "parameters" : [ {
-          "name" : "definitionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "archived",
-          "in" : "query",
-          "description" : "Whether to return only results that have been archived",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "boolean",
-            "default" : false
-          }
-        }, {
-          "name" : "appId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/PublicActionDefinition"
-                }
-              }
-            }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
-        },
-        "security" : [ {
-          "developer_hapikey" : [ ]
-        } ]
-      },
-      "delete" : {
-        "tags" : [ "Definitions" ],
-        "summary" : "Archive an extension definition",
-        "operationId" : "delete-/{appId}/{definitionId}_archive",
-        "parameters" : [ {
-          "name" : "definitionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "appId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "204" : {
-            "description" : "No content",
-            "content" : { }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
-        },
-        "security" : [ {
-          "developer_hapikey" : [ ]
-        } ]
-      },
-      "patch" : {
-        "tags" : [ "Definitions" ],
-        "summary" : "Patch an existing extension definition",
-        "operationId" : "patch-/{appId}/{definitionId}_update",
-        "parameters" : [ {
-          "name" : "definitionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "appId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/PublicActionDefinitionPatch"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/PublicActionDefinition"
-                }
-              }
-            }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
-        },
-        "security" : [ {
-          "developer_hapikey" : [ ]
-        } ]
-      }
-    },
-    "/{appId}/{definitionId}/functions/{functionType}/{functionId}" : {
-      "get" : {
-        "tags" : [ "Functions" ],
-        "summary" : "Get a function for a given definition",
-        "operationId" : "get-/{appId}/{definitionId}/functions/{functionType}/{functionId}_getById",
-        "parameters" : [ {
-          "name" : "definitionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "functionType",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "PRE_ACTION_EXECUTION", "PRE_FETCH_OPTIONS", "POST_FETCH_OPTIONS", "POST_ACTION_EXECUTION" ]
-          }
-        }, {
-          "name" : "functionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "appId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/PublicActionFunction"
-                }
-              }
-            }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
-        },
-        "security" : [ {
-          "developer_hapikey" : [ ]
-        } ]
-      },
-      "put" : {
-        "tags" : [ "Functions" ],
-        "summary" : "Insert a function for a definition",
-        "operationId" : "put-/{appId}/{definitionId}/functions/{functionType}/{functionId}_createOrReplace",
-        "parameters" : [ {
-          "name" : "definitionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "functionType",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "PRE_ACTION_EXECUTION", "PRE_FETCH_OPTIONS", "POST_FETCH_OPTIONS", "POST_ACTION_EXECUTION" ]
-          }
-        }, {
-          "name" : "functionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "appId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "text/plain" : {
-              "schema" : {
-                "type" : "string"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/PublicActionFunctionIdentifier"
-                }
-              }
-            }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
-        },
-        "security" : [ {
-          "developer_hapikey" : [ ]
-        } ]
-      },
-      "delete" : {
-        "tags" : [ "Functions" ],
-        "summary" : "Archive a function for a definition",
-        "operationId" : "delete-/{appId}/{definitionId}/functions/{functionType}/{functionId}_archive",
-        "parameters" : [ {
-          "name" : "definitionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "functionType",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string",
-            "enum" : [ "PRE_ACTION_EXECUTION", "PRE_FETCH_OPTIONS", "POST_FETCH_OPTIONS", "POST_ACTION_EXECUTION" ]
-          }
-        }, {
-          "name" : "functionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "appId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "204" : {
-            "description" : "No content",
-            "content" : { }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
-        },
-        "security" : [ {
-          "developer_hapikey" : [ ]
-        } ]
-      }
-    },
-    "/{appId}/{definitionId}/revisions" : {
-      "get" : {
-        "tags" : [ "Revisions" ],
-        "summary" : "Get all revisions for a given definition",
-        "operationId" : "get-/{appId}/{definitionId}/revisions_getPage",
-        "parameters" : [ {
-          "name" : "definitionId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "description" : "The maximum number of results to display per page",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        }, {
-          "name" : "after",
-          "in" : "query",
-          "description" : "The paging cursor token of the last successfully read resource will be returned as the `paging.next.after` JSON property of a paged response containing more results",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "appId",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int32"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CollectionResponsePublicActionRevisionForwardPaging"
-                }
-              }
-            }
-          },
-          "default" : {
-            "$ref" : "#/components/responses/Error"
-          }
-        },
-        "security" : [ {
-          "developer_hapikey" : [ ]
-        } ]
-      }
+    "x-hubspot-available-client-libraries": [
+        "Node",
+        "Python",
+        "Ruby",
+        "PHP"
+    ],
+    "x-hubspot-product-tier-requirements": {
+        "marketing": "PROFESSIONAL",
+        "sales": "PROFESSIONAL",
+        "service": "PROFESSIONAL",
+        "cms": "PROFESSIONAL",
+        "commerce": "PROFESSIONAL",
+        "crmHub": "PROFESSIONAL",
+        "dataHub": "PROFESSIONAL"
     }
-  },
-  "components" : {
-    "schemas" : {
-      "PublicActionFunction" : {
-        "required" : [ "functionSource", "functionType" ],
-        "type" : "object",
-        "properties" : {
-          "functionSource" : {
-            "type" : "string"
-          },
-          "functionType" : {
-            "type" : "string",
-            "enum" : [ "PRE_ACTION_EXECUTION", "PRE_FETCH_OPTIONS", "POST_FETCH_OPTIONS", "POST_ACTION_EXECUTION" ]
-          },
-          "id" : {
-            "type" : "string"
-          }
-        }
-      },
-      "PublicActionDefinition" : {
-        "required" : [ "actionUrl", "functions", "id", "inputFields", "labels", "objectTypes", "published", "revisionId" ],
-        "type" : "object",
-        "properties" : {
-          "functions" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/PublicActionFunctionIdentifier"
-            }
-          },
-          "actionUrl" : {
-            "type" : "string"
-          },
-          "published" : {
-            "type" : "boolean"
-          },
-          "labels" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "$ref" : "#/components/schemas/PublicActionLabels"
-            }
-          },
-          "inputFields" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/InputFieldDefinition"
-            }
-          },
-          "outputFields" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/OutputFieldDefinition"
-            }
-          },
-          "revisionId" : {
-            "type" : "string"
-          },
-          "archivedAt" : {
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "inputFieldDependencies" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/PublicActionDefinitionInputFieldDependencies"
-            }
-          },
-          "executionRules" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/PublicExecutionTranslationRule"
-            }
-          },
-          "id" : {
-            "type" : "string"
-          },
-          "objectTypes" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "objectRequestOptions" : {
-            "$ref" : "#/components/schemas/PublicObjectRequestOptions"
-          }
-        }
-      },
-      "PublicConditionalSingleFieldDependency" : {
-        "title" : "CONDITIONAL_SINGLE_FIELD",
-        "required" : [ "controllingFieldName", "controllingFieldValue", "dependencyType", "dependentFieldNames" ],
-        "type" : "object",
-        "properties" : {
-          "dependencyType" : {
-            "type" : "string",
-            "default" : "CONDITIONAL_SINGLE_FIELD",
-            "enum" : [ "CONDITIONAL_SINGLE_FIELD" ]
-          },
-          "controllingFieldName" : {
-            "type" : "string"
-          },
-          "controllingFieldValue" : {
-            "type" : "string"
-          },
-          "dependentFieldNames" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          }
-        }
-      },
-      "PublicActionDefinitionInputFieldDependencies" : {
-        "oneOf" : [ {
-          "$ref" : "#/components/schemas/PublicSingleFieldDependency"
-        }, {
-          "$ref" : "#/components/schemas/PublicConditionalSingleFieldDependency"
-        } ]
-      },
-      "PublicObjectRequestOptions" : {
-        "required" : [ "properties" ],
-        "type" : "object",
-        "properties" : {
-          "properties" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          }
-        }
-      },
-      "ErrorDetail" : {
-        "required" : [ "message" ],
-        "type" : "object",
-        "properties" : {
-          "subCategory" : {
-            "type" : "string",
-            "description" : "A specific category that contains more specific detail about the error"
-          },
-          "code" : {
-            "type" : "string",
-            "description" : "The status code associated with the error detail"
-          },
-          "in" : {
-            "type" : "string",
-            "description" : "The name of the field or parameter in which the error was found"
-          },
-          "context" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "array",
-              "items" : {
-                "type" : "string"
-              }
-            },
-            "description" : "Context about the error condition",
-            "example" : {
-              "missingScopes" : [ "scope1", "scope2" ]
-            }
-          },
-          "message" : {
-            "type" : "string",
-            "description" : "A human readable message describing the error along with remediation steps where appropriate"
-          }
-        }
-      },
-      "PublicActionLabels" : {
-        "required" : [ "actionName" ],
-        "type" : "object",
-        "properties" : {
-          "inputFieldDescriptions" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "string"
-            }
-          },
-          "appDisplayName" : {
-            "type" : "string"
-          },
-          "outputFieldLabels" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "string"
-            }
-          },
-          "inputFieldOptionLabels" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "object",
-              "additionalProperties" : {
-                "type" : "string"
-              }
-            }
-          },
-          "actionDescription" : {
-            "type" : "string"
-          },
-          "executionRules" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "string"
-            }
-          },
-          "inputFieldLabels" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "string"
-            }
-          },
-          "actionName" : {
-            "type" : "string"
-          },
-          "actionCardContent" : {
-            "type" : "string"
-          }
-        }
-      },
-      "PublicSingleFieldDependency" : {
-        "title" : "SINGLE_FIELD",
-        "required" : [ "controllingFieldName", "dependencyType", "dependentFieldNames" ],
-        "type" : "object",
-        "properties" : {
-          "dependencyType" : {
-            "type" : "string",
-            "default" : "SINGLE_FIELD",
-            "enum" : [ "SINGLE_FIELD" ]
-          },
-          "controllingFieldName" : {
-            "type" : "string"
-          },
-          "dependentFieldNames" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          }
-        }
-      },
-      "ForwardPaging" : {
-        "type" : "object",
-        "properties" : {
-          "next" : {
-            "$ref" : "#/components/schemas/NextPage"
-          }
-        }
-      },
-      "FieldTypeDefinition" : {
-        "required" : [ "externalOptions", "name", "options", "type" ],
-        "type" : "object",
-        "properties" : {
-          "helpText" : {
-            "type" : "string"
-          },
-          "referencedObjectType" : {
-            "type" : "string",
-            "enum" : [ "CONTACT", "COMPANY", "DEAL", "ENGAGEMENT", "TICKET", "OWNER", "PRODUCT", "LINE_ITEM", "BET_DELIVERABLE_SERVICE", "CONTENT", "CONVERSATION", "BET_ALERT", "PORTAL", "QUOTE", "FORM_SUBMISSION_INBOUNDDB", "QUOTA", "UNSUBSCRIBE", "COMMUNICATION", "FEEDBACK_SUBMISSION", "ATTRIBUTION", "SALESFORCE_SYNC_ERROR", "RESTORABLE_CRM_OBJECT", "HUB", "LANDING_PAGE", "PRODUCT_OR_FOLDER", "TASK", "FORM", "MARKETING_EMAIL", "AD_ACCOUNT", "AD_CAMPAIGN", "AD_GROUP", "AD", "KEYWORD", "CAMPAIGN", "SOCIAL_CHANNEL", "SOCIAL_POST", "SITE_PAGE", "BLOG_POST", "IMPORT", "EXPORT", "CTA", "TASK_TEMPLATE", "AUTOMATION_PLATFORM_FLOW", "OBJECT_LIST", "NOTE", "MEETING_EVENT", "CALL", "EMAIL", "PUBLISHING_TASK", "CONVERSATION_SESSION", "CONTACT_CREATE_ATTRIBUTION", "INVOICE", "MARKETING_EVENT", "CONVERSATION_INBOX", "CHATFLOW", "MEDIA_BRIDGE", "SEQUENCE", "SEQUENCE_STEP", "FORECAST", "SNIPPET", "TEMPLATE", "DEAL_CREATE_ATTRIBUTION", "QUOTE_TEMPLATE", "QUOTE_MODULE", "QUOTE_MODULE_FIELD", "QUOTE_FIELD", "SEQUENCE_ENROLLMENT", "SUBSCRIPTION", "ACCEPTANCE_TEST", "SOCIAL_BROADCAST", "DEAL_SPLIT", "DEAL_REGISTRATION", "GOAL_TARGET", "GOAL_TARGET_GROUP", "PORTAL_OBJECT_SYNC_MESSAGE", "FILE_MANAGER_FILE", "FILE_MANAGER_FOLDER", "SEQUENCE_STEP_ENROLLMENT", "APPROVAL", "APPROVAL_STEP", "CTA_VARIANT", "SALES_DOCUMENT", "DISCOUNT", "FEE", "TAX", "MARKETING_CALENDAR", "PERMISSIONS_TESTING", "PRIVACY_SCANNER_COOKIE", "DATA_SYNC_STATE", "WEB_INTERACTIVE", "PLAYBOOK", "FOLDER", "PLAYBOOK_QUESTION", "PLAYBOOK_SUBMISSION", "PLAYBOOK_SUBMISSION_ANSWER", "COMMERCE_PAYMENT", "GSC_PROPERTY", "SOX_PROTECTED_DUMMY_TYPE", "BLOG_LISTING_PAGE", "QUARANTINED_SUBMISSION", "PAYMENT_SCHEDULE", "PAYMENT_SCHEDULE_INSTALLMENT", "MARKETING_CAMPAIGN_UTM", "DISCOUNT_TEMPLATE", "DISCOUNT_CODE", "FEEDBACK_SURVEY", "CMS_URL", "SALES_TASK", "SALES_WORKLOAD", "USER", "POSTAL_MAIL", "SCHEMAS_BACKEND_TEST", "PAYMENT_LINK", "SUBMISSION_TAG", "CAMPAIGN_STEP", "SCHEDULING_PAGE", "SOX_PROTECTED_TEST_TYPE", "ORDER", "MARKETING_SMS", "PARTNER_ACCOUNT", "CAMPAIGN_TEMPLATE", "CAMPAIGN_TEMPLATE_STEP", "PLAYLIST", "CLIP", "CAMPAIGN_BUDGET_ITEM", "CAMPAIGN_SPEND_ITEM", "MIC", "CONTENT_AUDIT", "CONTENT_AUDIT_PAGE", "PLAYLIST_FOLDER", "LEAD", "ABANDONED_CART", "EXTERNAL_WEB_URL", "VIEW", "VIEW_BLOCK", "ROSTER", "CART", "AUTOMATION_PLATFORM_FLOW_ACTION", "SOCIAL_PROFILE", "PARTNER_CLIENT", "ROSTER_MEMBER", "MARKETING_EVENT_ATTENDANCE", "ALL_PAGES", "AI_FORECAST", "CRM_PIPELINES_DUMMY_TYPE", "KNOWLEDGE_ARTICLE", "PROPERTY_INFO", "DATA_PRIVACY_CONSENT", "GOAL_TEMPLATE", "SCORE_CONFIGURATION", "AUDIENCE", "PARTNER_CLIENT_REVENUE", "AUTOMATION_JOURNEY", "UNKNOWN" ]
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "options" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/Option"
-            }
-          },
-          "description" : {
-            "type" : "string"
-          },
-          "externalOptionsReferenceType" : {
-            "type" : "string"
-          },
-          "label" : {
-            "type" : "string"
-          },
-          "type" : {
-            "type" : "string",
-            "enum" : [ "string", "number", "bool", "datetime", "enumeration", "date", "phone_number", "currency_number", "json", "object_coordinates" ]
-          },
-          "fieldType" : {
-            "type" : "string",
-            "enum" : [ "booleancheckbox", "checkbox", "date", "file", "number", "phonenumber", "radio", "select", "text", "textarea", "calculation_equation", "calculation_rollup", "calculation_score", "calculation_read_time", "unknown", "html" ]
-          },
-          "optionsUrl" : {
-            "type" : "string"
-          },
-          "externalOptions" : {
-            "type" : "boolean"
-          }
-        }
-      },
-      "CollectionResponsePublicActionFunctionIdentifierNoPaging" : {
-        "required" : [ "results" ],
-        "type" : "object",
-        "properties" : {
-          "results" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/PublicActionFunctionIdentifier"
-            }
-          }
-        }
-      },
-      "InputFieldDefinition" : {
-        "required" : [ "isRequired", "typeDefinition" ],
-        "type" : "object",
-        "properties" : {
-          "isRequired" : {
-            "type" : "boolean"
-          },
-          "automationFieldType" : {
-            "type" : "string"
-          },
-          "typeDefinition" : {
-            "$ref" : "#/components/schemas/FieldTypeDefinition"
-          },
-          "supportedValueTypes" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string",
-              "enum" : [ "STATIC_VALUE", "OBJECT_PROPERTY", "FIELD_DATA", "FETCHED_OBJECT_PROPERTY", "ENROLLMENT_EVENT_PROPERTY" ]
-            }
-          }
-        }
-      },
-      "PublicExecutionTranslationRule" : {
-        "required" : [ "conditions", "labelName" ],
-        "type" : "object",
-        "properties" : {
-          "labelName" : {
-            "type" : "string"
-          },
-          "conditions" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "object",
-              "properties" : { }
-            }
-          }
-        }
-      },
-      "PublicActionFunctionIdentifier" : {
-        "required" : [ "functionType" ],
-        "type" : "object",
-        "properties" : {
-          "functionType" : {
-            "type" : "string",
-            "enum" : [ "PRE_ACTION_EXECUTION", "PRE_FETCH_OPTIONS", "POST_FETCH_OPTIONS", "POST_ACTION_EXECUTION" ]
-          },
-          "id" : {
-            "type" : "string"
-          }
-        }
-      },
-      "PublicActionRevision" : {
-        "required" : [ "createdAt", "definition", "id", "revisionId" ],
-        "type" : "object",
-        "properties" : {
-          "revisionId" : {
-            "type" : "string"
-          },
-          "createdAt" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "definition" : {
-            "$ref" : "#/components/schemas/PublicActionDefinition"
-          },
-          "id" : {
-            "type" : "string"
-          }
-        }
-      },
-      "CallbackCompletionRequest" : {
-        "required" : [ "outputFields" ],
-        "type" : "object",
-        "properties" : {
-          "outputFields" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "string"
-            }
-          }
-        }
-      },
-      "CollectionResponsePublicActionDefinitionForwardPaging" : {
-        "required" : [ "results" ],
-        "type" : "object",
-        "properties" : {
-          "paging" : {
-            "$ref" : "#/components/schemas/ForwardPaging"
-          },
-          "results" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/PublicActionDefinition"
-            }
-          }
-        }
-      },
-      "Error" : {
-        "required" : [ "category", "correlationId", "message" ],
-        "type" : "object",
-        "properties" : {
-          "subCategory" : {
-            "type" : "string",
-            "description" : "A specific category that contains more specific detail about the error"
-          },
-          "context" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "array",
-              "items" : {
-                "type" : "string"
-              }
-            },
-            "description" : "Context about the error condition",
-            "example" : {
-              "missingScopes" : [ "scope1", "scope2" ],
-              "invalidPropertyName" : [ "propertyValue" ]
-            }
-          },
-          "correlationId" : {
-            "type" : "string",
-            "description" : "A unique identifier for the request. Include this value with any error reports or support tickets",
-            "format" : "uuid",
-            "example" : "aeb5f871-7f07-4993-9211-075dc63e7cbf"
-          },
-          "links" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "string"
-            },
-            "description" : "A map of link names to associated URIs containing documentation about the error or recommended remediation steps",
-            "example" : {
-              "knowledge-base" : "https://www.hubspot.com/products/service/knowledge-base"
-            }
-          },
-          "message" : {
-            "type" : "string",
-            "description" : "A human readable message describing the error along with remediation steps where appropriate",
-            "example" : "Invalid input (details will vary based on the error)"
-          },
-          "category" : {
-            "type" : "string",
-            "description" : "The error category",
-            "example" : "VALIDATION_ERROR"
-          },
-          "errors" : {
-            "type" : "array",
-            "description" : "further information about the error",
-            "items" : {
-              "$ref" : "#/components/schemas/ErrorDetail"
-            }
-          }
-        },
-        "example" : {
-          "message" : "Invalid input (details will vary based on the error)",
-          "correlationId" : "aeb5f871-7f07-4993-9211-075dc63e7cbf",
-          "category" : "VALIDATION_ERROR",
-          "links" : {
-            "knowledge-base" : "https://www.hubspot.com/products/service/knowledge-base"
-          }
-        }
-      },
-      "CollectionResponsePublicActionRevisionForwardPaging" : {
-        "required" : [ "results" ],
-        "type" : "object",
-        "properties" : {
-          "paging" : {
-            "$ref" : "#/components/schemas/ForwardPaging"
-          },
-          "results" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/PublicActionRevision"
-            }
-          }
-        }
-      },
-      "PublicActionDefinitionEggInputFieldDependencies" : {
-        "oneOf" : [ {
-          "$ref" : "#/components/schemas/PublicSingleFieldDependency"
-        }, {
-          "$ref" : "#/components/schemas/PublicConditionalSingleFieldDependency"
-        } ]
-      },
-      "CallbackCompletionBatchRequest" : {
-        "required" : [ "callbackId", "outputFields" ],
-        "type" : "object",
-        "properties" : {
-          "outputFields" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "string"
-            }
-          },
-          "callbackId" : {
-            "type" : "string"
-          }
-        }
-      },
-      "PublicActionDefinitionEgg" : {
-        "required" : [ "actionUrl", "functions", "inputFields", "labels", "objectTypes", "published" ],
-        "type" : "object",
-        "properties" : {
-          "inputFields" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/InputFieldDefinition"
-            }
-          },
-          "outputFields" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/OutputFieldDefinition"
-            }
-          },
-          "archivedAt" : {
-            "type" : "integer",
-            "format" : "int64"
-          },
-          "functions" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/PublicActionFunction"
-            }
-          },
-          "actionUrl" : {
-            "type" : "string"
-          },
-          "inputFieldDependencies" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/PublicActionDefinitionEggInputFieldDependencies"
-            }
-          },
-          "published" : {
-            "type" : "boolean"
-          },
-          "executionRules" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/PublicExecutionTranslationRule"
-            }
-          },
-          "objectTypes" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "objectRequestOptions" : {
-            "$ref" : "#/components/schemas/PublicObjectRequestOptions"
-          },
-          "labels" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "$ref" : "#/components/schemas/PublicActionLabels"
-            }
-          }
-        }
-      },
-      "PublicActionDefinitionPatch" : {
-        "type" : "object",
-        "properties" : {
-          "inputFields" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/InputFieldDefinition"
-            }
-          },
-          "outputFields" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/OutputFieldDefinition"
-            }
-          },
-          "actionUrl" : {
-            "type" : "string"
-          },
-          "inputFieldDependencies" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/PublicActionDefinitionPatchInputFieldDependencies"
-            }
-          },
-          "published" : {
-            "type" : "boolean"
-          },
-          "executionRules" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/PublicExecutionTranslationRule"
-            }
-          },
-          "objectTypes" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "objectRequestOptions" : {
-            "$ref" : "#/components/schemas/PublicObjectRequestOptions"
-          },
-          "labels" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "$ref" : "#/components/schemas/PublicActionLabels"
-            }
-          }
-        }
-      },
-      "BatchInputCallbackCompletionBatchRequest" : {
-        "required" : [ "inputs" ],
-        "type" : "object",
-        "properties" : {
-          "inputs" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/CallbackCompletionBatchRequest"
-            }
-          }
-        }
-      },
-      "PublicActionDefinitionPatchInputFieldDependencies" : {
-        "oneOf" : [ {
-          "$ref" : "#/components/schemas/PublicSingleFieldDependency"
-        }, {
-          "$ref" : "#/components/schemas/PublicConditionalSingleFieldDependency"
-        } ]
-      },
-      "Option" : {
-        "required" : [ "description", "displayOrder", "doubleData", "hidden", "label", "readOnly", "value" ],
-        "type" : "object",
-        "properties" : {
-          "hidden" : {
-            "type" : "boolean"
-          },
-          "displayOrder" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "doubleData" : {
-            "type" : "number"
-          },
-          "description" : {
-            "type" : "string"
-          },
-          "readOnly" : {
-            "type" : "boolean"
-          },
-          "label" : {
-            "type" : "string"
-          },
-          "value" : {
-            "type" : "string"
-          }
-        }
-      },
-      "OutputFieldDefinition" : {
-        "required" : [ "typeDefinition" ],
-        "type" : "object",
-        "properties" : {
-          "typeDefinition" : {
-            "$ref" : "#/components/schemas/FieldTypeDefinition"
-          }
-        }
-      },
-      "NextPage" : {
-        "required" : [ "after" ],
-        "type" : "object",
-        "properties" : {
-          "link" : {
-            "type" : "string"
-          },
-          "after" : {
-            "type" : "string"
-          }
-        }
-      }
-    },
-    "responses" : {
-      "Error" : {
-        "description" : "An error occurred.",
-        "content" : {
-          "*/*" : {
-            "schema" : {
-              "$ref" : "#/components/schemas/Error"
-            }
-          }
-        }
-      }
-    },
-    "securitySchemes" : {
-      "oauth2_legacy" : {
-        "type" : "oauth2",
-        "flows" : {
-          "authorizationCode" : {
-            "authorizationUrl" : "https://app.hubspot.com/oauth/authorize",
-            "tokenUrl" : "https://api.hubapi.com/oauth/v1/token",
-            "scopes" : {
-              "automation" : "Read from and write to my Workflows"
-            }
-          }
-        }
-      },
-      "developer_hapikey" : {
-        "type" : "apiKey",
-        "name" : "hapikey",
-        "in" : "query"
-      },
-      "private_apps_legacy" : {
-        "type" : "apiKey",
-        "name" : "private-app-legacy",
-        "in" : "header",
-        "x-ballerina-name" : "privateAppLegacy"
-      }
-    }
-  },
-  "x-hubspot-available-client-libraries" : [ "PHP", "Node", "Ruby", "Python" ],
-  "x-hubspot-product-tier-requirements" : {
-    "marketing" : "PROFESSIONAL",
-    "sales" : "PROFESSIONAL",
-    "service" : "PROFESSIONAL"
-  },
-  "x-hubspot-documentation-banner" : "NONE"
 }
