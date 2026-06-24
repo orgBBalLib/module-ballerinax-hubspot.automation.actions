@@ -15,28 +15,73 @@
 // under the License.
 
 import ballerina/io;
-import ballerinax/hubspot.automation.actions;
+import ballerina/http;
 
 configurable string apiKey = ?;
 
+type FieldTypeDefinition record {
+    string referencedObjectType;
+    boolean externalOptions;
+    string externalOptionsReferenceType;
+    string name;
+    string 'type;
+    string fieldType;
+    string optionsUrl;
+    anydata[] options;
+};
+
+type InputFieldDefinition record {
+    boolean isRequired;
+    string automationFieldType;
+    FieldTypeDefinition typeDefinition;
+    string[] supportedValueTypes;
+};
+
+type PublicActionFunction record {
+    string functionSource;
+    string functionType;
+};
+
+type LabelDefinition record {
+    map<string> inputFieldLabels;
+    string actionName;
+    string actionDescription;
+    string appDisplayName;
+    string actionCardContent;
+};
+
+type PublicActionDefinitionEgg record {
+    InputFieldDefinition[] inputFields;
+    string actionUrl;
+    boolean published;
+    string[] objectTypes;
+    record {string[] properties;} objectRequestOptions;
+    PublicActionFunction[] functions;
+    map<LabelDefinition> labels;
+};
+
+type PublicActionDefinition record {
+    string id;
+    InputFieldDefinition[] inputFields?;
+    string actionUrl?;
+    boolean published?;
+    string[] objectTypes?;
+};
+
 public function main() returns error? {
 
-    // Developer API Key Config
-    actions:ConnectionConfig apikeyConfig = {
+    // Client initialization with API key
+    http:Client hubspotAutomation = check new ("https://api.hubapi.com/automation/v4/actions", {
         auth: {
-            hapikey: apiKey,
-            privateAppLegacy: ""
+            token: apiKey
         }
-    };
-
-    // Client initialization   
-    final actions:Client hubspotAutomation = check new actions:Client(apikeyConfig);
+    });
 
     // sample extension definition
     string createdExtensionId = "";
-    int:Signed32 appId = 5712614;
+    int appId = 5712614;
 
-    actions:FieldTypeDefinition typeDefinition = {
+    FieldTypeDefinition typeDefinition = {
         referencedObjectType: "OWNER",
         externalOptions: false,
         externalOptionsReferenceType: "",
@@ -47,19 +92,19 @@ public function main() returns error? {
         options: []
     };
 
-    actions:InputFieldDefinition inputFieldDefinition = {
+    InputFieldDefinition inputFieldDefinition = {
         isRequired: true,
         automationFieldType: "",
         typeDefinition: typeDefinition,
         supportedValueTypes: ["STATIC_VALUE"]
     };
 
-    actions:PublicActionFunction publicActionFunction = {
+    PublicActionFunction publicActionFunction = {
         functionSource: "exports.main = (event, callback) => {\r\n  callback({\r\n    outputFields: {\r\n      myOutput: \"example output value\"\r\n    }\r\n  });\r\n}",
         functionType: "POST_ACTION_EXECUTION"
     };
 
-    actions:PublicActionDefinitionEgg testingPublicActionDefinitionEgg = {
+    PublicActionDefinitionEgg testingPublicActionDefinitionEgg = {
         inputFields: [inputFieldDefinition],
         actionUrl: "https://webhook.site/94d09471-6f4c-4a7f-bae2-c9a585dd41e0",
         published: false,
@@ -82,20 +127,27 @@ public function main() returns error? {
     };
 
     // Create Extension
-    actions:PublicActionDefinition response = check hubspotAutomation->/[appId].post(testingPublicActionDefinitionEgg);
-    createdExtensionId = response.id;
+    http:Response createHttpResponse = check hubspotAutomation->post(string `/${appId}`, testingPublicActionDefinitionEgg);
+    json createJsonResponse = check createHttpResponse.getJsonPayload();
+    PublicActionDefinition createResponse = check createJsonResponse.cloneWithType(PublicActionDefinition);
+    createdExtensionId = createResponse.id;
     io:println("Extension Created with ID: " + createdExtensionId);
 
     // Get Extension
-    actions:PublicActionDefinition getResponse = check hubspotAutomation->/[appId]/[createdExtensionId].get();
+    http:Response getHttpResponse = check hubspotAutomation->get(string `/${appId}/${createdExtensionId}`);
+    json getJsonResponse = check getHttpResponse.getJsonPayload();
+    PublicActionDefinition getResponse = check getJsonResponse.cloneWithType(PublicActionDefinition);
     io:println("Extension Retrieved: " + getResponse.id);
 
     // Update Extension
-    actions:PublicActionDefinition updateResponse = check hubspotAutomation->/[appId]/[createdExtensionId];
+    json updatePayload = testingPublicActionDefinitionEgg.toJson();
+    http:Response updateHttpResponse = check hubspotAutomation->patch(string `/${appId}/${createdExtensionId}`, updatePayload);
+    json updateJsonResponse = check updateHttpResponse.getJsonPayload();
+    PublicActionDefinition updateResponse = check updateJsonResponse.cloneWithType(PublicActionDefinition);
     io:println("Extension Updated: ");
     io:println(updateResponse);
 
     // Delete Extension
-    _ = check hubspotAutomation->/[appId]/[createdExtensionId].delete();
+    http:Response _ = check hubspotAutomation->delete(string `/${appId}/${createdExtensionId}`);
     io:println("Extension Deleted");
 }

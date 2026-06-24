@@ -25,6 +25,7 @@ int:Signed32 appId = 5712614;
 ConnectionConfig apikeyConfig = {
     auth: {
         hapikey: apiKey,
+        privateApp: "",
         privateAppLegacy: ""
     }
 };
@@ -35,10 +36,8 @@ final Client hubspotAutomation = check new Client(apikeyConfig);
 // Sample Extension Definition
 string createdExtensionId = "";
 
-FieldTypeDefinition typeDefinition = {
+PublicFieldTypeDefinition typeDefinition = {
     referencedObjectType: "OWNER",
-    externalOptions: false,
-    externalOptionsReferenceType: "",
     name: "optionsInput",
     'type: "enumeration",
     fieldType: "select",
@@ -46,9 +45,8 @@ FieldTypeDefinition typeDefinition = {
     options: []
 };
 
-InputFieldDefinition inputFieldDefinition = {
+PublicInputFieldDefinition inputFieldDefinition = {
     isRequired: true,
-    automationFieldType: "",
     typeDefinition: typeDefinition,
     supportedValueTypes: ["STATIC_VALUE"]
 };
